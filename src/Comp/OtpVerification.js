@@ -7,35 +7,35 @@ const OtpVerificationPage = () => {
     const navigate = useNavigate();
     const { email } = location.state;
 
-//   const handleVerifyOtp = (e) => {
-//     e.preventDefault();
-//     // Handle OTP verification logic here
-//     console.log('Verifying OTP', otp);
-//   };
-const handleVerifyOtp = async (e) => {
+  const handleVerifyOtp = (e) => {
     e.preventDefault();
-
-    try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/otp/verify`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, otp }),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        console.log(data.message);
-        // On successful OTP verification, navigate to the dashboard or home page
-        navigate('/dashboard');
-      } else {
-        alert(data.error);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    // Handle OTP verification logic here
+    console.log('Verifying OTP', otp);
   };
+// const handleVerifyOtp = async (e) => {
+//     e.preventDefault();
+
+//     try {
+//       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/otp/verify`, {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({ email, otp }),
+//       });
+
+//       const data = await response.json();
+//       if (response.ok) {
+//         console.log(data.message);
+//         // On successful OTP verification, navigate to the dashboard or home page
+//         navigate('/dashboard');
+//       } else {
+//         alert(data.error);
+//       }
+//     } catch (error) {
+//       console.error('Error:', error);
+//     }
+//   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-500 font-roboto">

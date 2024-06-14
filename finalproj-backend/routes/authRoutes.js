@@ -6,6 +6,9 @@ const Otp = require('../models/Otp');
 const nodemailer = require('nodemailer');
 
 const router = express.Router();
+const { signup, login, getUser } = require('../controllers/authController');
+const auth = require('../middleware/authMiddlewar');
+
 
 // JWT Secret
 const JWT_SECRET = 'your_jwt_secret_key';
@@ -79,5 +82,8 @@ router.post('/signin', async (req, res) => {
     res.status(500).json({ error: 'Error signing in' });
   }
 });
+router.post('/signup', signup);
+router.post('/login', login);
+router.get('/user', auth, getUser);
 
 module.exports = router;
