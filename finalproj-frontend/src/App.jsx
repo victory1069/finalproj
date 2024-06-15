@@ -13,16 +13,16 @@ function App() {
     <Router>
       <div className="App flex">
         <div className="flex-grow">
-          
+
           <Routes>
             <Route path="/authentication" element={<AuthPage />} />
             <Route path="/signup" element={<SignupPage />} />
-            <Route path="/verify-otp" element={<OtpVerificationPage/>} />
+            <Route path="/verify-otp" element={<OtpVerificationPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile-update" element={<ProfileUpdate />} />
             <Route path="/service-payment" element={<ServicePayment />} />
             <Route path="/" element={<AuthPage />} />
-            <Route path="/forgot-password" element= {<ForgotPassword/>}    />       
+            <Route path="/forgot-password" element={<ForgotPassword />} />
           </Routes>
         </div>
       </div>
