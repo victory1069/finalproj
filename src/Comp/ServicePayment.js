@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { FiCreditCard, FiBook, FiArrowLeft } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 
 const ServicePayment = () => {
   const [paymentMethod, setPaymentMethod] = useState('wallet');
   const [amount, setAmount] = useState('');
+  const navigate = useNavigate();
 
   const handleServicePayment = async (e) => {
     e.preventDefault();
-    // Assuming you have a token stored in localStorage
     const token = localStorage.getItem('token');
     const config = {
       headers: {
@@ -21,7 +23,6 @@ const ServicePayment = () => {
       if (paymentMethod === 'wallet') {
         res = await axios.post('/api/payment/pay-with-wallet', { amount }, config);
       } else {
-        // Here you can add card payment details
         const cardDetails = { /* Card details here */ };
         res = await axios.post('/api/payment/pay-with-card', { cardDetails, amount }, config);
       }
@@ -34,33 +35,57 @@ const ServicePayment = () => {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">Service Payment</h1>
-      <form onSubmit={handleServicePayment} className="mt-6">
-        <label className="block mb-2">Amount</label>
-        <input
-          type="number"
-          className="w-full mb-4 p-2 border border-gray-300 rounded"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          required
-        />
-        <label className="block mb-2">Payment Method</label>
-        <select
-          className="w-full mb-4 p-2 border border-gray-300 rounded"
-          value={paymentMethod}
-          onChange={(e) => setPaymentMethod(e.target.value)}
-        >
-          <option value="wallet">Wallet</option>
-          <option value="card">Card</option>
-        </select>
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-200"
-        >
-          Pay
-        </button>
-      </form>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500 text-white font-agrandir">
+      <main className="text-center p-6 w-full max-w-md bg-white bg-opacity-25 rounded-lg shadow-lg">
+        <div className="flex items-center justify-between mb-8">
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="text-white hover:text-gray-300 transition duration-200"
+          >
+            <FiArrowLeft className="text-3xl" />
+          </button>
+          <div className="text-3xl" />
+        </div>
+        <form onSubmit={handleServicePayment} className="space-y-6">
+          <div className="relative">
+            <label htmlFor="amount" className="block text-white text-left mb-2">Amount</label>
+            <input
+              type="number"
+              id="amount"
+              placeholder="Enter amount"
+              className="w-full bg-transparent border-b-2 border-white text-white p-2 focus:outline-none focus:border-blue-300"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              required
+            />
+          </div>
+          <div className="relative">
+            <label className="block text-white text-left mb-2">Payment Method</label>
+            <div className="flex justify-center space-x-4">
+              <button
+                type="button"
+                className={`p-2 rounded-full focus:outline-none ${paymentMethod === 'wallet' ? 'bg-blue-300' : 'bg-white bg-opacity-50'}`}
+                onClick={() => setPaymentMethod('wallet')}
+              >
+                <FiBook className="text-2xl" />
+              </button>
+              <button
+                type="button"
+                className={`p-2 rounded-full focus:outline-none ${paymentMethod === 'card' ? 'bg-blue-300' : 'bg-white bg-opacity-50'}`}
+                onClick={() => setPaymentMethod('card')}
+              >
+                <FiCreditCard className="text-2xl" />
+              </button>
+            </div>
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-black bg-opacity-75 text-white p-2 rounded hover:bg-opacity-60 transition duration-200"
+          >
+            Make Payment
+          </button>
+        </form>
+      </main>
     </div>
   );
 };
