@@ -23,6 +23,7 @@ function App() {
       loggedInUserGlobal.user = loggedInUserParsed
       navigate("/dashboard")
     } catch (e) {
+      // don't navigate on sign in or signup pages
       if (!location.pathname.endsWith("/") && !location.pathname.endsWith("signup"))
         navigate("/")
       console.error(e)
