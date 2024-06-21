@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from '../axiosConifg';
 import { useNavigate } from 'react-router-dom';
+import { loggedInUserGlobal } from './loggedInUser';
 
 const AuthPage = () => {
   const [emailOrPhone, setEmailOrPhone] = useState('');
@@ -10,8 +11,10 @@ const AuthPage = () => {
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/auth/login', { email: emailOrPhone, password });
-      localStorage.setItem('token', res.data.token);
+      const res = (await axios.post('/auth/login', { email: emailOrPhone, password })).data;
+      console.log(res)
+      localStorage.setItem('loggedInUser', JSON.stringify(res.data.user));
+      loggedInUserGlobal.user = res.data.user
       alert('Login successful');
       navigate('/dashboard');
     } catch (err) {
