@@ -3,7 +3,7 @@ import axios from '../axiosConifg';
 import { useNavigate } from 'react-router-dom';
 
 const SignupPage = () => {
-  const [firstname, setName] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
@@ -19,13 +19,13 @@ const SignupPage = () => {
     }
 
     try {
-      const res = await axios.post('/auth/signup', { firstname, email, phone, password });
+      const res = await axios.post('/auth/signup', { name, email, phone, password });
       console.log(res.data);
       alert('Registration successful');
       navigate('/authentication');
     } catch (err) {
-      const res = await axios.post('/auth/signup', { firstname, email, phone, password });
-      console.log(res.data);
+      const res = await axios.post('/auth/signup', { name, email, phone, password });
+      alert(res.data);
       console.error(err.response.data);
       alert('Error registering user');
     }
@@ -41,7 +41,7 @@ const SignupPage = () => {
               id="name"
               placeholder="Enter your firstname"
               className="w-full bg-transparent border-b-2 border-white text-white p-2 focus:outline-none focus:border-blue-300"
-              value={firstname}
+              value={name}
               onChange={(e) => setName(e.target.value)}
               required
             />

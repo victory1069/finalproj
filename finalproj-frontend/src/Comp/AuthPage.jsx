@@ -22,7 +22,7 @@ const AuthPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-500 text-white font-agrandir">
-      <main className="text-center p-6 w-full max-w-md bg-white bg-opacity-25 rounded-lg shadow-lg">
+      <main className="text-center p-6 w-full max-w-md bg-white bg-opacity-100 rounded-lg shadow-lg">
         <form onSubmit={handleSignIn} className="bg-white bg-opacity-0 p-8 rounded-lg  max-w-sm mx-auto">
           <input
             type="text"
@@ -47,6 +47,7 @@ const AuthPage = () => {
             Sign In
           </button>
           <a href="/forgot-password" className="block mt-4 text-blue-500">Forgot Password?</a>
+          <a href="/signup" className="block mt-2 text-blue-500">Don't have  an Account yet?</a>
         </form>
       </main>
     </div>

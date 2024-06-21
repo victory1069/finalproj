@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiLogOut, FiUser, FiCreditCard, FiDollarSign } from 'react-icons/fi';
+import { FiLogOut, FiUser, FiCreditCard, FiDollarSign, FiPaperclip} from 'react-icons/fi';
 
 const Dashboard = () => {
   return (
@@ -24,6 +24,12 @@ const Dashboard = () => {
           <div className="bg-white bg-opacity-75 p-6 rounded-lg shadow-lg text-black">
             <FiCreditCard className="text-4xl mb-4 mx-auto text-blue-500" />
             <h2 className="text-2xl font-semibold mb-4">Service Payment</h2>
+          </div>
+        </Link>
+        <Link to="/authentication" className="text-blue-500 underline">
+          <div className="bg-white bg-opacity-75 p-6 rounded-lg shadow-lg text-black">
+            <FiPaperclip className="text-4xl mb-4 mx-auto text-blue-500" />
+            <h2 className="text-2xl font-semibold mb-4">Transaction History</h2>
           </div>
         </Link>
         <Link to="/authentication" className="text-red-500 underline">

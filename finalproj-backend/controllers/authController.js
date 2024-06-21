@@ -29,10 +29,10 @@ exports.signup = async (req, res) => {
             }
         };
 
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 360000 }, (err, token) => {
-            if (err) throw err;
-            res.json({ token });
-        });
+        // jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 360000 }, (err, token) => {
+        //     if (err) throw err;
+        //     res.json({ token });
+        // });
 
     } catch (err) {
         console.error(err.message);
@@ -65,16 +65,6 @@ exports.login = async (req, res) => {
             res.json({ token });
         });
 
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server error');
-    }
-};
-
-exports.getUser = async (req, res) => {
-    try {
-        const user = await User.findById(req.user.id).select('-password');
-        res.json(user);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

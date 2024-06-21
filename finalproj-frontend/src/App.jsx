@@ -7,6 +7,8 @@ import ProfileUpdate from './Comp/ProfileUpdate';
 import ServicePayment from './Comp/ServicePayment';
 import OtpVerificationPage from './Comp/OtpverificationPage';
 import ForgotPassword from './Comp/ForgotPassword';
+import LoadWallet from './Comp/LoadWallet';
+import EnterCardDetails from './Comp/EnterCardDetails';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
             <Route path="/service-payment" element={<ServicePayment />} />
             <Route path="/" element={<AuthPage />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/load-wallet" element={<LoadWallet />} />
+            <Route path="/enter-card-details" element={<EnterCardDetails />} />
           </Routes>
         </div>
       </div>
