@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import AuthPage from './Comp/AuthPage';
 import SignupPage from './Comp/SignupPage';
 import Dashboard from './Comp/Dashboard';
@@ -14,6 +14,7 @@ import { loggedInUserGlobal } from './Comp/loggedInUser';
 
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
   useEffect(function checkUserIsLoggedIn() {
     try {
       const loggedInUserString = localStorage.getItem("loggedInUser")
@@ -22,7 +23,8 @@ function App() {
       loggedInUserGlobal.user = loggedInUserParsed
       navigate("/dashboard")
     } catch (e) {
-      navigate("/")
+      if (!location.pathname.endsWith("/") && !location.pathname.endsWith("signup"))
+        navigate("/")
       console.error(e)
     }
   }, [])
