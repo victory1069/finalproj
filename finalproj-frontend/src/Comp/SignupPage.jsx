@@ -12,19 +12,16 @@ const SignupPage = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-
     if (password !== confirmPassword) {
       alert('Passwords do not match');
       return;
     }
-
     try {
       const res = await axios.post('/auth/signup', { name, email, phone, password });
       console.log(res.data);
       alert('Registration successful');
       navigate('/authentication');
     } catch (err) {
-      const res = await axios.post('/auth/signup', { name, email, phone, password });
       alert(res.data);
       console.error(err.response.data);
       alert('Error registering user');

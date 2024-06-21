@@ -21,13 +21,13 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-500 text-white font-agrandir">
-      <main className="text-center p-6 w-full max-w-md bg-white bg-opacity-100 rounded-lg shadow-lg">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-500 font-agrandir">
+      <main className="text-center p-6 w-full max-w-md bg-white rounded-lg shadow-lg">
         <form onSubmit={handleSignIn} className="bg-white bg-opacity-0 p-8 rounded-lg  max-w-sm mx-auto">
           <input
             type="text"
             placeholder="Enter your email or phone number"
-            className="w-full mb-4 p-2 border-b-2 border-gray-300 rounded bg-transparent text-white focus:outline-none focus:border-blue-300"
+            className="w-full mb-4 p-2 border-b-2 border-gray-300 rounded bg-transparent text-black focus:outline-none focus:border-blue-300"
             value={emailOrPhone}
             onChange={(e) => setEmailOrPhone(e.target.value)}
             required
@@ -35,7 +35,7 @@ const AuthPage = () => {
           <input
             type="password"
             placeholder="Enter your password"
-            className="w-full mb-4 p-2 border-b-2 border-gray-300 rounded bg-transparent text-white focus:outline-none focus:border-blue-300"
+            className="w-full mb-4 p-2 border-b-2 border-gray-300 rounded bg-transparent text-black focus:outline-none focus:border-blue-300"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
