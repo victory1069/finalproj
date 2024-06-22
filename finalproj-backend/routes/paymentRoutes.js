@@ -1,19 +1,22 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { payWithCard, payWithWallet } = require('../controllers/paymentController');
-const auth = require('../middleware/authMiddlewar');
+const {
+  payWithCard,
+  payWithWallet,
+} = require("../controllers/paymentController");
+const auth = require("../middleware/authMiddlewar");
 
-router.post('/pay-with-card', auth, payWithCard);
-router.post('/pay-with-wallet', auth, payWithWallet);
+router.post("/pay-with-card", auth, payWithCard);
+router.post("/pay-with-wallet", auth, payWithWallet);
 
 module.exports = router;
 
-router.post('/initialize', async (req, res) => {
+router.post("/initialize", async (req, res) => {
   const { email, amount } = req.body;
 
   try {
     const response = await axios.post(
-      'https://api.paystack.co/transaction/initialize',
+      "https://api.paystack.co/transaction/initialize",
       {
         email,
         amount: amount * 100, // Paystack expects the amount in kobo
@@ -21,7 +24,7 @@ router.post('/initialize', async (req, res) => {
       {
         headers: {
           Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       }
     );
@@ -32,16 +35,19 @@ router.post('/initialize', async (req, res) => {
   }
 });
 
-router.post('/verify', async (req, res) => {
+router.post("/verify", async (req, res) => {
   const { reference } = req.body;
 
   try {
-    const response = await axios.get(`https://api.paystack.co/transaction/verify/${reference}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await axios.get(
+      `https://api.paystack.co/transaction/verify/${reference}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     res.status(200).json(response.data);
   } catch (error) {
