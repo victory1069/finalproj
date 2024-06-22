@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from '../axiosConifg';
 import { useNavigate } from 'react-router-dom';
-import { loggedInUserGlobal } from './loggedInUser';
+import { useUser } from '../contexts/UserContext';
 
 const AuthPage = () => {
+  const { setUser } = useUser()
   const [emailOrPhone, setEmailOrPhone] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -12,9 +13,8 @@ const AuthPage = () => {
     e.preventDefault();
     try {
       const res = (await axios.post('/auth/login', { email: emailOrPhone, password })).data;
-      console.log(res)
       localStorage.setItem('loggedInUser', JSON.stringify(res.data.user));
-      loggedInUserGlobal.user = res.data.user
+      setUser(res.data.user)
       alert('Login successful');
       navigate('/dashboard');
     } catch (err) {

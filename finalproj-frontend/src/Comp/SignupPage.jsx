@@ -17,8 +17,7 @@ const SignupPage = () => {
       return;
     }
     try {
-      const res = await axios.post('/auth/signup', { name, email, phone, password });
-      console.log(res.data);
+      await axios.post('/auth/signup', { name, email, phone, password });
       alert('Registration successful');
       navigate('/authentication');
     } catch (err) {

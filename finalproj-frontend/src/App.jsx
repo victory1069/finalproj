@@ -7,21 +7,23 @@ import ProfileUpdate from './Comp/ProfileUpdate';
 import ServicePayment from './Comp/ServicePayment';
 import OtpVerificationPage from './Comp/OtpverificationPage';
 import ForgotPassword from './Comp/ForgotPassword';
-import LoadWallet from './Comp/LoadWallet';
+import Wallet from './Comp/Wallet';
 import EnterCardDetails from './Comp/EnterCardDetails';
 import { useNavigate } from 'react-router-dom';
-import { loggedInUserGlobal } from './Comp/loggedInUser';
+import { useUser } from './contexts/UserContext';
 
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { setUser } = useUser()
   useEffect(function checkUserIsLoggedIn() {
     try {
       const loggedInUserString = localStorage.getItem("loggedInUser")
       const loggedInUserParsed = JSON.parse(loggedInUserString)
       if (!loggedInUserParsed) throw new Error("You're not logged in")
-      loggedInUserGlobal.user = loggedInUserParsed
-      navigate("/dashboard")
+      setUser(loggedInUserParsed)
+      if (location.pathname === "/")
+        navigate("/dashboard")
     } catch (e) {
       // don't navigate on sign in or signup pages
       if (!location.pathname.endsWith("/") && !location.pathname.endsWith("signup"))
@@ -42,7 +44,7 @@ function App() {
           <Route path="/service-payment" element={<ServicePayment />} />
           <Route path="/" element={<AuthPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/load-wallet" element={<LoadWallet />} />
+          <Route path="/wallet" element={<Wallet />} />
           <Route path="/enter-card-details" element={<EnterCardDetails />} />
         </Routes>
       </div>
