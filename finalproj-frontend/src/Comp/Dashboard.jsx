@@ -1,15 +1,21 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-import { FiLogOut, FiUser, FiCreditCard, FiDollarSign, FiPaperclip } from 'react-icons/fi';
+import {
+  FiLogOut,
+  FiUser,
+  FiCreditCard,
+  FiDollarSign,
+  FiPaperclip,
+} from "react-icons/fi";
 
 const Dashboard = () => {
   const navigate = useNavigate();
 
   const handleSignout = () => {
-    localStorage.removeItem("loggedInUser")
-    navigate("/")
-  }
+    localStorage.removeItem("loggedInUser");
+    navigate("/");
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-600 to-purple-600 text-white font-agrandir">
@@ -22,10 +28,19 @@ const Dashboard = () => {
             </div>
           </Link>
 
-          <Link to="/profile-update" className="text-blue-500 underline block mb-2">
+          <Link
+            to="/profile-update"
+            className="text-blue-500 underline block mb-2"
+          >
             <div className="bg-white bg-opacity-75 p-6 rounded-lg shadow-lg text-black">
               <FiUser className="text-4xl mb-4 mx-auto text-blue-500" />
               <h2 className="text-2xl font-semibold mb-4">Profile</h2>
+            </div>
+          </Link>
+          <Link to="/transfer" className="text-blue-500 underline block mb-2">
+            <div className="bg-white bg-opacity-75 p-6 rounded-lg shadow-lg text-black">
+              <FiUser className="text-4xl mb-4 mx-auto text-blue-500" />
+              <h2 className="text-2xl font-semibold mb-4">Transfer</h2>
             </div>
           </Link>
           <Link to="/service-payment" className="text-blue-500 underline">
@@ -37,10 +52,17 @@ const Dashboard = () => {
           <Link to="/authentication" className="text-blue-500 underline">
             <div className="bg-white bg-opacity-75 p-6 rounded-lg shadow-lg text-black">
               <FiPaperclip className="text-4xl mb-4 mx-auto text-blue-500" />
-              <h2 className="text-2xl font-semibold mb-4">Transaction History</h2>
+              <h2 className="text-2xl font-semibold mb-4">
+                Transaction History
+              </h2>
             </div>
           </Link>
-          <div onClick={() => { handleSignout() }} className="text-red-500 underline cursor-pointer">
+          <div
+            onClick={() => {
+              handleSignout();
+            }}
+            className="text-red-500 underline cursor-pointer"
+          >
             <div className="bg-white bg-opacity-75 p-6 rounded-lg shadow-lg text-black">
               <FiLogOut className="text-4xl mb-4 mx-auto text-red-500" />
               <h2 className="text-2xl font-semibold mb-4">Logout</h2>

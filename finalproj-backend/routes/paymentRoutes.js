@@ -4,12 +4,14 @@ const router = express.Router();
 const {
   payWithCard,
   payWithWallet,
+  transferToUser,
 } = require("../controllers/paymentController");
 const auth = require("../middleware/authMiddlewar");
 const User = require("../models/User");
 
 router.post("/pay-with-card", auth, payWithCard);
 router.post("/pay-with-wallet", auth, payWithWallet);
+router.post("/transfer-to-user", auth, transferToUser);
 
 module.exports = router;
 
