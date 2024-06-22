@@ -5,9 +5,9 @@ const auth = require("../middleware/authMiddlewar");
 const User = require("../models/User");
 
 router.put("/profile", auth, updateProfile);
-router.put("/profile/:userId", auth, async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findById(req.userId);
     res.json(user);
   } catch (err) {
     console.error(err.message);

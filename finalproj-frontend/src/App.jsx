@@ -23,9 +23,14 @@ function App() {
       const loggedInUserParsed = JSON.parse(loggedInUserString)
       if (!loggedInUserParsed) throw new Error("You're not logged in")
       setUser(loggedInUserParsed)
-      axiosInstance.post('/auth/login', { email: emailOrPhone, password }).then(res => {
-        localStorage.setItem('loggedInUser', JSON.stringify(res.data.data.user));
-        setUser(res.data.user)
+      axiosInstance.get(`/user`, {
+        headers: {
+          "x-auth-token": loggedInUserParsed._id
+        }
+      }).then(res => {
+        localStorage.setItem('loggedInUser', JSON.stringify(res.data));
+        setUser(res.data)
+        console.log(res)
       });
       if (location.pathname === "/")
         navigate("/dashboard")
