@@ -6,7 +6,7 @@ import axiosInstance from "../axiosConifg";
 import { formatCurrency } from "../utilities";
 
 const Wallet = () => {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
   const [amount, setAmount] = useState("");
   const navigate = useNavigate();
 
@@ -22,11 +22,11 @@ const Wallet = () => {
       },
       callback: function (response) {
         let message = "Payment complete! Reference: " + response.reference;
-        alert("done");
         axiosInstance
           .post("/payment/verify", { reference: response.reference })
           .then((res) => {
-            console.log(res);
+            setUser(res.data.user);
+            setAmount(0);
             alert(message);
           })
           .catch((err) => {
