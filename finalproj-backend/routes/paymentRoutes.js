@@ -6,35 +6,12 @@ const {
   payWithWallet,
 } = require("../controllers/paymentController");
 const auth = require("../middleware/authMiddlewar");
+const User = require("../models/User");
 
 router.post("/pay-with-card", auth, payWithCard);
 router.post("/pay-with-wallet", auth, payWithWallet);
 
 module.exports = router;
-
-router.post("/initialize", async (req, res) => {
-  const { email, amount } = req.body;
-
-  try {
-    const response = await axios.post(
-      "https://api.paystack.co/transaction/initialize",
-      {
-        email,
-        amount: amount * 100, // Paystack expects the amount in kobo
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    res.status(200).json(response.data);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
 
 router.post("/verify", async (req, res) => {
   const { reference } = req.body;
@@ -49,8 +26,20 @@ router.post("/verify", async (req, res) => {
         },
       }
     );
-
-    res.status(200).json(response.data);
+    const { amount, status, customer } = response.data.data;
+    if (status !== "success") throw new Error("Transaction not successful");
+    const user = await User.findOneAndUpdate(
+      {
+        email: customer.email,
+      },
+      { $inc: { walletBalance: amount } },
+      {
+        new: true, // Return the updated document
+        runValidators: true,
+      }
+    );
+    const { password: _pass, ...publicUser } = user.toJSON();
+    res.status(200).json({ transaction: response.data, user: publicUser });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
