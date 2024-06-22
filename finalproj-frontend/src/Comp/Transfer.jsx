@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import axios from "../axiosConifg";
@@ -6,7 +6,7 @@ import { useUser } from "../contexts/UserContext";
 
 const Transfer = () => {
   const [email, setEmail] = useState("");
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState("");
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -21,9 +21,9 @@ const Transfer = () => {
       return;
     }
     try {
-      res = await axios.post(
+      const res = await axios.post(
         "/payment/transfer-to-user",
-        { amount: parseFloat(amount), email },
+        { amount: parseFloat(amount) * 100, email }, // Convert Naira to Kobo
         {
           headers: {
             "x-auth-token": user._id,
@@ -49,7 +49,7 @@ const Transfer = () => {
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="relative">
-            <label htmlFor="amount" className="block text-white text-left mb-2">
+            <label htmlFor="email" className="block text-white text-left mb-2">
               Email
             </label>
             <input
@@ -64,12 +64,12 @@ const Transfer = () => {
           </div>
           <div className="relative">
             <label htmlFor="amount" className="block text-white text-left mb-2">
-              Amount
+              Amount (Naira)
             </label>
             <input
               type="number"
               id="amount"
-              placeholder="Enter amount"
+              placeholder="Enter amount in Naira"
               className="w-full bg-transparent border-b-2 border-white text-white p-2 focus:outline-none focus:border-blue-300"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
