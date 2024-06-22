@@ -5,7 +5,7 @@ import { useUser } from '../contexts/UserContext';
 import axiosInstance from '../axiosConifg';
 
 const Wallet = () => {
-    const { user } = useUser()
+    const { user, setUser } = useUser()
     const [amount, setAmount] = useState('');
     const navigate = useNavigate();
 
@@ -21,9 +21,9 @@ const Wallet = () => {
             },
             callback: function (response) {
                 let message = 'Payment complete! Reference: ' + response.reference;
-                alert("done")
                 axiosInstance.post('/payment/verify', { reference: response.reference }).then((res => {
-                    console.log(res)
+                    setUser(res.data.user)
+                    setAmount(0)
                     alert(message);
                 })).catch(err => {
                     console.error(err)
@@ -57,7 +57,7 @@ const Wallet = () => {
 
                         <form onSubmit={handleSubmit} id="paymentForm" className="mt-10 mb-10 space-y-6">
                             <div className="relative">
-                                <label htmlFor="amount" className="block text-white text-left mb-2">Load Wallet</label>
+                                <label htmlFor="amount" className="block text-white text-left mb-2">Load Wallet (<span className='line-through'>N</span>)</label>
                                 <input
                                     type="number"
                                     id="amount"
