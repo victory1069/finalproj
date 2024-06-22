@@ -38,6 +38,7 @@ router.post("/verify", async (req, res) => {
         runValidators: true,
       }
     );
+    await user.save();
     const { password: _pass, ...publicUser } = user.toJSON();
     res.status(200).json({ transaction: response.data, user: publicUser });
   } catch (error) {

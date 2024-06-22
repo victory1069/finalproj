@@ -11,6 +11,7 @@ import Wallet from './Comp/Wallet';
 import EnterCardDetails from './Comp/EnterCardDetails';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from './contexts/UserContext';
+import axiosInstance from './axiosConifg';
 
 function App() {
   const navigate = useNavigate();
@@ -22,6 +23,10 @@ function App() {
       const loggedInUserParsed = JSON.parse(loggedInUserString)
       if (!loggedInUserParsed) throw new Error("You're not logged in")
       setUser(loggedInUserParsed)
+      axiosInstance.post('/auth/login', { email: emailOrPhone, password }).then(res => {
+        localStorage.setItem('loggedInUser', JSON.stringify(res.data.data.user));
+        setUser(res.data.user)
+      });
       if (location.pathname === "/")
         navigate("/dashboard")
     } catch (e) {
