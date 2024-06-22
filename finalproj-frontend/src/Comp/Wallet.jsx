@@ -64,7 +64,6 @@ const Wallet = () => {
             <div className="text-left">
               Current Balance:{" "}
               <span className="text-black">
-                <span className="line-through"></span>
                 {formatCurrency(user.walletBalance / 100)}
               </span>
             </div>
@@ -79,7 +78,7 @@ const Wallet = () => {
                   htmlFor="amount"
                   className="block text-white text-left mb-2"
                 >
-                  Load Wallet
+                  Load Wallet (<span className="line-through">N</span>)
                 </label>
                 <input
                   type="number"
