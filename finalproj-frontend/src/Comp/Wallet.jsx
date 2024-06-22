@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiCreditCard, FiArrowRight } from 'react-icons/fi';
+import { FiCreditCard, FiArrowRight, FiArrowLeft } from 'react-icons/fi';
 import { useUser } from '../contexts/UserContext';
 import axiosInstance from '../axiosConifg';
 
@@ -38,35 +38,51 @@ const Wallet = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500 text-white font-agrandir">
-            {
-                user
-                && <main className="text-center p-6 w-full max-w-md bg-white bg-opacity-25 rounded-lg shadow-lg">
-                    <h1 className="text-3xl font-bold mb-8 text-white">Wallet - {user.name}</h1>
-                    <div className="text-left">Wallet address (email): <span className='text-black'>{user.email}</span></div>
-                    <div className="text-left">Current Balance: <span className='text-black'><span className='line-through'>N</span>{(user.walletBalance / 100).toFixed(2)} </span></div>
 
-                    <form onSubmit={handleSubmit} id="paymentForm" className="mt-10 mb-10 space-y-6">
-                        <div className="relative">
-                            <label htmlFor="amount" className="block text-white text-left mb-2">Load Wallet</label>
-                            <input
-                                type="number"
-                                id="amount"
-                                placeholder="Enter amount"
-                                className="w-full bg-transparent border-b-2 border-white text-white p-2 focus:outline-none focus:border-blue-300"
-                                value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-200 flex items-center justify-center"
-                        >
-                            Next <FiArrowRight className="ml-2" />
-                        </button>
-                    </form>
-                </main>}
-        </div>
+            <main className="text-center p-6 w-full max-w-md bg-white bg-opacity-25 rounded-lg shadow-lg">
+                <div className="flex items-center justify-between mb-8">
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="text-white hover:text-gray-300 transition duration-200"
+                    >
+                        <FiArrowLeft className="text-3xl" />
+                    </button>
+                    <div className="text-3xl" />
+                </div>
+                {user ?
+                    <>
+                        <h1 className="text-3xl font-bold mb-8 text-white">Wallet - {user.name}</h1>
+                        <div className="text-left">Wallet address (email): <span className='text-black'>{user.email}</span></div>
+                        <div className="text-left">Current Balance: <span className='text-black'><span className='line-through'>N</span>{(user.walletBalance / 100).toFixed(2)} </span></div>
+
+                        <form onSubmit={handleSubmit} id="paymentForm" className="mt-10 mb-10 space-y-6">
+                            <div className="relative">
+                                <label htmlFor="amount" className="block text-white text-left mb-2">Load Wallet</label>
+                                <input
+                                    type="number"
+                                    id="amount"
+                                    placeholder="Enter amount"
+                                    className="w-full bg-transparent border-b-2 border-white text-white p-2 focus:outline-none focus:border-blue-300"
+                                    value={amount}
+                                    onChange={(e) => setAmount(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-200 flex items-center justify-center"
+                            >
+                                Next <FiArrowRight className="ml-2" />
+                            </button>
+                        </form>
+                    </>
+                    :
+                    <div div className='text-black'>
+                        Error loading user or you are not logged in
+                    </div>
+                }
+            </main >
+        </div >
     );
 };
 

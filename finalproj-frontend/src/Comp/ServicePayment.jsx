@@ -39,7 +39,7 @@ const ServicePayment = () => {
       <main className="text-center p-6 w-full max-w-md bg-white bg-opacity-25 rounded-lg shadow-lg">
         <div className="flex items-center justify-between mb-8">
           <button
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate(-1)}
             className="text-white hover:text-gray-300 transition duration-200"
           >
             <FiArrowLeft className="text-3xl" />
