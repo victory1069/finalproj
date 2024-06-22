@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { FiArrowLeft, FiBook, FiCreditCard } from "react-icons/fi";
+import React, { useEffect, useState } from "react";
+import { FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import axios from "../axiosConifg";
+import { useUser } from "../contexts/UserContext";
 
 const Transfer = () => {
   const [email, setEmail] = useState("");
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(0);
+  const { user } = useUser();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -14,17 +16,22 @@ const Transfer = () => {
       alert("Please Enter Recipient Email");
       return;
     }
-    if (!amount) {
-      alert("Please Enter Amount");
+    if (!amount || isNaN(amount) || amount <= 0) {
+      alert("Please Enter a valid Amount");
       return;
     }
     try {
-      res = await axios.post("/payment/transfer-to-user", { amount, email })
-        .data;
-      alert("Transaction successful:", res.data.info);
+      res = await axios.post(
+        "/payment/transfer-to-user",
+        { amount: parseFloat(amount), email },
+        {
+          headers: {
+            "x-auth-token": user._id,
+          },
+        }
+      ).data;
     } catch (err) {
       console.error(err);
-      //   alert("Error registering user");
     }
   };
 
