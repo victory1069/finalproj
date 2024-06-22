@@ -1,38 +1,46 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import AuthPage from './Comp/AuthPage';
-import SignupPage from './Comp/SignupPage';
-import Dashboard from './Comp/Dashboard';
-import ProfileUpdate from './Comp/ProfileUpdate';
-import ServicePayment from './Comp/ServicePayment';
-import OtpVerificationPage from './Comp/OtpverificationPage';
-import ForgotPassword from './Comp/ForgotPassword';
-import Wallet from './Comp/Wallet';
-import EnterCardDetails from './Comp/EnterCardDetails';
-import { useNavigate } from 'react-router-dom';
-import { useUser } from './contexts/UserContext';
+import React, { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useLocation,
+} from "react-router-dom";
+import AuthPage from "./Comp/AuthPage";
+import SignupPage from "./Comp/SignupPage";
+import Dashboard from "./Comp/Dashboard";
+import ProfileUpdate from "./Comp/ProfileUpdate";
+import ServicePayment from "./Comp/ServicePayment";
+import OtpVerificationPage from "./Comp/OtpverificationPage";
+import ForgotPassword from "./Comp/ForgotPassword";
+import Wallet from "./Comp/Wallet";
+import EnterCardDetails from "./Comp/EnterCardDetails";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "./contexts/UserContext";
+import Transfer from "./Comp/Transfer";
 
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { setUser } = useUser()
+  const { setUser } = useUser();
   useEffect(function checkUserIsLoggedIn() {
     try {
-      const loggedInUserString = localStorage.getItem("loggedInUser")
-      const loggedInUserParsed = JSON.parse(loggedInUserString)
-      if (!loggedInUserParsed) throw new Error("You're not logged in")
-      setUser(loggedInUserParsed)
-      if (location.pathname === "/")
-        navigate("/dashboard")
+      const loggedInUserString = localStorage.getItem("loggedInUser");
+      const loggedInUserParsed = JSON.parse(loggedInUserString);
+      if (!loggedInUserParsed) throw new Error("You're not logged in");
+      setUser(loggedInUserParsed);
+      if (location.pathname === "/") navigate("/dashboard");
     } catch (e) {
       // don't navigate on sign in or signup pages
-      if (!location.pathname.endsWith("/") && !location.pathname.endsWith("signup"))
-        navigate("/")
-      console.error(e)
+      if (
+        !location.pathname.endsWith("/") &&
+        !location.pathname.endsWith("signup")
+      )
+        navigate("/");
+      console.error(e);
     }
-  }, [])
+  }, []);
   return (
-
     <div className="App flex">
       <div className="flex-grow">
         <Routes>
@@ -46,6 +54,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/enter-card-details" element={<EnterCardDetails />} />
+          <Route path="/transfer" element={<Transfer />} />
         </Routes>
       </div>
     </div>
