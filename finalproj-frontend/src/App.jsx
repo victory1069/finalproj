@@ -18,6 +18,26 @@ import EnterCardDetails from "./Comp/EnterCardDetails";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "./contexts/UserContext";
 import Transfer from "./Comp/Transfer";
+import React, { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useLocation,
+} from "react-router-dom";
+import AuthPage from "./Comp/AuthPage";
+import SignupPage from "./Comp/SignupPage";
+import Dashboard from "./Comp/Dashboard";
+import ProfileUpdate from "./Comp/ProfileUpdate";
+import ServicePayment from "./Comp/ServicePayment";
+import OtpVerificationPage from "./Comp/OtpverificationPage";
+import ForgotPassword from "./Comp/ForgotPassword";
+import Wallet from "./Comp/Wallet";
+import EnterCardDetails from "./Comp/EnterCardDetails";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "./contexts/UserContext";
+import axiosInstance from "./axiosConifg";
 
 function App() {
   const navigate = useNavigate();
@@ -29,6 +49,17 @@ function App() {
       const loggedInUserParsed = JSON.parse(loggedInUserString);
       if (!loggedInUserParsed) throw new Error("You're not logged in");
       setUser(loggedInUserParsed);
+      axiosInstance
+        .get(`/user`, {
+          headers: {
+            "x-auth-token": loggedInUserParsed._id,
+          },
+        })
+        .then((res) => {
+          localStorage.setItem("loggedInUser", JSON.stringify(res.data));
+          setUser(res.data);
+          console.log(res);
+        });
       if (location.pathname === "/") navigate("/dashboard");
     } catch (e) {
       // don't navigate on sign in or signup pages

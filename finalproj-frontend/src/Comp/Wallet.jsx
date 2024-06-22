@@ -27,6 +27,7 @@ const Wallet = () => {
                     alert(message);
                 })).catch(err => {
                     console.error(err)
+                    console.alert("Could not verify payment")
                 })
             }
         });
