@@ -16,3 +16,8 @@ module.exports = (req, res, next) => {
     res.status(401).json({ msg: "Token is not valid" });
   }
 };
+
+/**
+ * using this auth middleware you can simply check req.userId to get the userId of an authenticated user
+ * but only for auth routes
+ */
