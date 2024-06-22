@@ -8,7 +8,9 @@ router.put("/profile", auth, updateProfile);
 router.get("/", auth, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
-    res.json(user);
+    // dont send password to FE
+    const { password: _pass, ...restOfUser } = user.toJSON();
+    res.json(restOfUser);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
