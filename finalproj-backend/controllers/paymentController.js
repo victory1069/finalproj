@@ -31,29 +31,32 @@ exports.payWithWallet = async (req, res) => {
 exports.transferToUser = async (req, res) => {
   const { amount, email: recipientEmail } = req.body;
 
-  console.log(req);
-
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.userId);
     const recipient = await User.findOne({ email: recipientEmail });
 
     if (!user || !recipient) {
       return res.status(404).json({ msg: "User not found" });
     }
 
-    if (user.walletBalance < amount) {
+    const transferAmount = parseFloat(amount);
+    if (isNaN(transferAmount) || transferAmount <= 0) {
+      return res.status(400).json({ msg: "Invalid amount" });
+    }
+
+    if (user.walletBalance < transferAmount) {
       return res.status(400).json({ msg: "Insufficient balance" });
     }
 
-    user.walletBalance -= amount;
-    recipient.walletBalance += amount;
+    user.walletBalance -= transferAmount;
+    recipient.walletBalance += transferAmount;
 
     await user.save();
     await recipient.save();
 
     res.status(200).json({
       msg: "Transaction successful",
-      info: `You sent ${amount} to ${recipientEmail}`,
+      info: `You sent ${transferAmount.toFixed(2)} to ${recipientEmail}`,
     });
   } catch (err) {
     console.error(err.message);
