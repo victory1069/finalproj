@@ -43,7 +43,7 @@ const Wallet = () => {
                 && <main className="text-center p-6 w-full max-w-md bg-white bg-opacity-25 rounded-lg shadow-lg">
                     <h1 className="text-3xl font-bold mb-8 text-white">Wallet - {user.name}</h1>
                     <div className="text-left">Wallet address (email): <span className='text-black'>{user.email}</span></div>
-                    <div className="text-left">Current Balance: <span className='text-black'><span className='line-through'>N</span>{user.walletBalance.toFixed(2)} </span></div>
+                    <div className="text-left">Current Balance: <span className='text-black'><span className='line-through'>N</span>{(user.walletBalance / 100).toFixed(2)} </span></div>
 
                     <form onSubmit={handleSubmit} id="paymentForm" className="mt-10 mb-10 space-y-6">
                         <div className="relative">
