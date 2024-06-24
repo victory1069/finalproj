@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
+const transactionRoutes = require("./routes/transactionRoutes");
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ mongoose
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/transactions", transactionRoutes);
 
 const PORT = process.env.PORT || 5000;
 

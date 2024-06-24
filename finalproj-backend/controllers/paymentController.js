@@ -1,3 +1,4 @@
+const Transaction = require("../models/Transaction");
 const User = require("../models/User");
 
 exports.payWithCard = async (req, res) => {
@@ -35,8 +36,12 @@ exports.transferToUser = async (req, res) => {
     const user = await User.findById(req.userId);
     const recipient = await User.findOne({ email: recipientEmail });
 
-    if (!user || !recipient) {
-      return res.status(404).json({ msg: "User not found" });
+    if (!user) {
+      return res.status(404).json({ msg: `User not found` });
+    }
+
+    if (!recipient) {
+      return res.status(404).json({ msg: `Recipient not found` });
     }
 
     const transferAmount = parseFloat(amount);
@@ -53,7 +58,14 @@ exports.transferToUser = async (req, res) => {
 
     await user.save();
     await recipient.save();
-
+    const transaction = new Transaction({
+      amount: transferAmount,
+      description: `Transfer to ${recipientEmail}`,
+      recipientEmail,
+      isExternal: false,
+      senderEmail: user.email,
+    });
+    await transaction.save();
     res.status(200).json({
       msg: "Transaction successful",
       info: `You sent ${transferAmount.toFixed(2)} to ${recipientEmail}`,
