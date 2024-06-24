@@ -60,7 +60,9 @@ exports.transferToUser = async (req, res) => {
     await recipient.save();
     const transaction = new Transaction({
       amount: transferAmount,
-      description: `Transfer to ${recipientEmail}`,
+      description: recipient.isServiceProvider
+        ? `Payment to ${recipient.name}`
+        : `Transfer to ${recipientEmail}`,
       recipientEmail,
       isExternal: false,
       senderEmail: user.email,
