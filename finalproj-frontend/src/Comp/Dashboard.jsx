@@ -49,7 +49,7 @@ const Dashboard = () => {
               <h2 className="text-2xl font-semibold mb-4">Service Payment</h2>
             </div>
           </Link>
-          <Link to="/authentication" className="text-blue-500 underline">
+          <Link to="/history" className="text-blue-500 underline">
             <div className="bg-white bg-opacity-75 p-6 rounded-lg shadow-lg text-black">
               <FiPaperclip className="text-4xl mb-4 mx-auto text-blue-500" />
               <h2 className="text-2xl font-semibold mb-4">
