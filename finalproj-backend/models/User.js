@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema({
   accountNumber: { type: String, unique: true },
   pin: { type: String },
   isLoggedIn: { type: Boolean, default: true },
+  isServiceProvider: { type: Boolean, default: false },
 });
 
 const User = mongoose.model("User", UserSchema);

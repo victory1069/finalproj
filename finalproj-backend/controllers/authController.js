@@ -9,7 +9,7 @@ function generateAccountNumber() {
 }
 
 exports.signup = async (req, res) => {
-  const { name, email, phone, password } = req.body;
+  const { name, email, phone, password, isServiceProvider } = req.body;
 
   try {
     const accountNumber = generateAccountNumber();
@@ -21,6 +21,7 @@ exports.signup = async (req, res) => {
       phone,
       password,
       accountNumber,
+      isServiceProvider: isServiceProvider ? true : false,
     });
     await user.save();
 
