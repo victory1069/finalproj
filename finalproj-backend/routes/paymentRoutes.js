@@ -8,6 +8,7 @@ const {
 } = require("../controllers/paymentController");
 const auth = require("../middleware/authMiddlewar");
 const User = require("../models/User");
+const Transaction = require("../models/Transaction");
 
 router.post("/pay-with-card", auth, payWithCard);
 router.post("/pay-with-wallet", auth, payWithWallet);
@@ -40,6 +41,14 @@ router.post("/verify", async (req, res) => {
         runValidators: true,
       }
     );
+
+    const transaction = new Transaction({
+      amount: amount,
+      isExternal: true,
+      recipientEmail: customer.email,
+      description: "Load Wallet",
+    });
+    await transaction.save();
     await user.save();
     const { password: _pass, ...publicUser } = user.toJSON();
     res.status(200).json({ transaction: response.data, user: publicUser });

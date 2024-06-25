@@ -19,3 +19,16 @@ exports.updateProfile = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+
+exports.listServiceProviders = async (req, res) => {
+  try {
+    const serviceProviders = await User.find({
+      isServiceProvider: true,
+    }).select("-password");
+
+    res.json({ success: true, data: { serviceProviders: serviceProviders } });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};

@@ -1,16 +1,10 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Transaction = require('../models/Transaction');
+const auth = require("../middleware/authMiddlewar");
+const {
+  retrieveTransactions,
+} = require("../controllers/transactionController");
 
-// GET /api/transactions/:userId
-router.get('/:userId', async (req, res) => {
-  try {
-    const transactions = await Transaction.find({ userId: req.params.userId }).sort({ date: -1 });
-    res.status(200).json(transactions);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
-  }
-});
+router.get("/", auth, retrieveTransactions);
 
 module.exports = router;

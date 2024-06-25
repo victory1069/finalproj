@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "./contexts/UserContext";
 import axiosInstance from "./axiosConifg";
 import Transfer from "./Comp/Transfer";
-import TransactionHistory from './Comp/TransactionHistory'; 
+import TransactionHistory from "./Comp/TransactionHistory";
 
 function App() {
   const navigate = useNavigate();
@@ -68,6 +68,7 @@ function App() {
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/enter-card-details" element={<EnterCardDetails />} />
           <Route path="/transfer" element={<Transfer />} />
+          <Route path="/history" element={<TransactionHistory />} />
           <Route path="/transaction-history" element={<TransactionHistory />} />
         </Routes>
       </div>
