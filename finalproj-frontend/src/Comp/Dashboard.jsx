@@ -8,6 +8,7 @@ import {
   FiDollarSign,
   FiPaperclip,
 } from "react-icons/fi";
+import 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap';
 
 const Dashboard = () => {
   const navigate = useNavigate();
