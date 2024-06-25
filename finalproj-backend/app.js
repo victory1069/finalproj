@@ -28,6 +28,7 @@ mongoose
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/payment", paymentRoutes);
+//app.use('/api/transactions', transactionRoutes);
 
 const PORT = process.env.PORT || 5000;
 

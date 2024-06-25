@@ -4,6 +4,7 @@ import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { useUser } from "../contexts/UserContext";
 import axiosInstance from "../axiosConifg";
 import { formatCurrency } from "../utilities";
+import 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap';
 
 const Wallet = () => {
   const { user, setUser } = useUser();
@@ -37,7 +38,7 @@ const Wallet = () => {
     });
 
     handler.openIframe();
-    // navigate('/enter-card-details', { state: { amount } });
+    navigate('/enter-card-details', { state: { amount } });
   };
 
   return (
@@ -57,15 +58,15 @@ const Wallet = () => {
             <h1 className="text-3xl font-bold mb-8 text-white">
               Wallet - {user.name}
             </h1>
-            <div className="text-left">
-              Wallet address (email):{" "}
-              <span className="text-black">{user.email}</span>
+            <div className="text-left mb-4">
+              <h2 className="text-xl font-semibold text-white">Wallet address (email):</h2>
+              <p className="text-lg text-black">{user.email}</p>
             </div>
-            <div className="text-left">
-              Current Balance:{" "}
-              <span className="text-black">
+            <div className="text-left mb-8">
+              <h2 className="text-xl font-semibold text-white">Current Balance:</h2>
+              <p className="text-lg text-black">
                 {formatCurrency(user.walletBalance / 100)}
-              </span>
+              </p>
             </div>
 
             <form

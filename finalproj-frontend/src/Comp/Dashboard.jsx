@@ -8,7 +8,6 @@ import {
   FiDollarSign,
   FiPaperclip,
 } from "react-icons/fi";
-import 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -19,7 +18,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-600 to-purple-600 text-white font-agrandir">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black font-agrandir">
       <main className="text-center p-6 w-full max-w-4xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Link to="/wallet" className="text-blue-500 underline block mb-2">
@@ -50,7 +49,7 @@ const Dashboard = () => {
               <h2 className="text-2xl font-semibold mb-4">Service Payment</h2>
             </div>
           </Link>
-          <Link to="/authentication" className="text-blue-500 underline">
+          <Link to="/transaction-history" className="text-blue-500 underline">
             <div className="bg-white bg-opacity-75 p-6 rounded-lg shadow-lg text-black">
               <FiPaperclip className="text-4xl mb-4 mx-auto text-blue-500" />
               <h2 className="text-2xl font-semibold mb-4">
@@ -76,3 +75,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

@@ -25,8 +25,8 @@ const AuthPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-500 font-agrandir">
-      <main className="text-center p-6 w-full max-w-md bg-white rounded-lg shadow-lg">
-        <form onSubmit={handleSignIn} className="bg-white bg-opacity-0 p-8 rounded-lg  max-w-sm mx-auto">
+      <main className="text-center p-6 w-full max-w-md bg-white bg-opacity-50 rounded-lg shadow-lg">
+        <form onSubmit={handleSignIn} className="bg-white bg-opacity-0 p-8 rounded-lg  max-w-sm mx-auto font-agrandir">
           <input
             type="text"
             placeholder="Enter your email or phone number"
