@@ -1,13 +1,46 @@
 const User = require("../models/User");
 const Services = require("../models/Services");
 
-exports.listServiceProviders = async (req, res) => {
+exports.listServices = async (req, res) => {
   try {
-    const serviceProviders = await User.find({
-      isServiceProvider: true,
-    }).select("-password");
-
-    res.json({ success: true, data: { serviceProviders: serviceProviders } });
+    const services = await Services.aggregate([
+      {
+        $group: {
+          _id: "$ownerId",
+          services: {
+            $push: {
+              serviceName: "$serviceName",
+              amount: "$amount",
+            },
+          },
+        },
+      },
+      {
+        $addFields: {
+          ownerIdObj: { $toObjectId: "$_id" },
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "ownerIdObj",
+          foreignField: "_id",
+          as: "ownerDetails",
+        },
+      },
+      {
+        $unwind: "$ownerDetails",
+      },
+      {
+        $project: {
+          _id: 0,
+          ownerId: "$_id",
+          ownerName: "$ownerDetails.name",
+          services: 1,
+        },
+      },
+    ]);
+    res.json({ success: true, data: { services } });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");

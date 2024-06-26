@@ -5,16 +5,16 @@ const {
   updatePassword,
   updateUsername,
   createNewService,
-  getAllServicesForUser,
+  listServices,
 } = require("../controllers/userController");
 const auth = require("../middleware/authMiddlewar");
 const User = require("../models/User");
 
 router.put("/updatePassword", auth, updatePassword);
 router.put("/updateUsername", auth, updateUsername);
-router.get("/serviceProviders", auth, listServiceProviders);
+// router.get("/serviceProviders", auth, listServiceProviders);
 router.post("/createNewService", auth, createNewService);
-router.get("/userServices", auth, getAllServicesForUser);
+router.get("/listServices", listServices);
 
 router.get("/", auth, async (req, res) => {
   try {
