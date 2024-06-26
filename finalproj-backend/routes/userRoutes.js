@@ -1,15 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const {
-  updateProfile,
-  getUser,
   listServiceProviders,
+  updatePassword,
+  updateUsername,
 } = require("../controllers/userController");
 const auth = require("../middleware/authMiddlewar");
 const User = require("../models/User");
 
-router.put("/profile", auth, updateProfile);
+router.put("/updatePassword", auth, updatePassword);
+router.put("/updateUsername", auth, updateUsername);
 router.get("/serviceProviders", auth, listServiceProviders);
+
 router.get("/", auth, async (req, res) => {
   try {
     const user = await User.findById(req.userId);

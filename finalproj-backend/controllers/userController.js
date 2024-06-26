@@ -1,24 +1,4 @@
 const User = require("../models/User");
-const bcrypt = require("bcryptjs");
-
-exports.updateProfile = async (req, res) => {
-  const { pin } = req.body;
-
-  try {
-    const user = await User.findById(req.user.id);
-
-    if (pin) {
-      const salt = await bcrypt.genSalt(10);
-      user.pin = await bcrypt.hash(pin, salt);
-    }
-
-    await user.save();
-    res.json(user);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
-  }
-};
 
 exports.listServiceProviders = async (req, res) => {
   try {
@@ -27,6 +7,52 @@ exports.listServiceProviders = async (req, res) => {
     }).select("-password");
 
     res.json({ success: true, data: { serviceProviders: serviceProviders } });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+exports.updatePassword = async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    if (!newPassword || !oldPassword) {
+      return res
+        .status(400)
+        .json({ msg: "Please provide both old and new passwords." });
+    }
+    const user = await User.findById(req.userId);
+    if (user.password !== oldPassword) {
+      return res.status(400).json({ msg: "Old password does not match." });
+    }
+    user.password = newPassword;
+    await user.save();
+    res.json({
+      user: user,
+      success: true,
+      message: "Password updated successfully.",
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+exports.updateUsername = async (req, res) => {
+  try {
+    const { newName } = req.body;
+    if (!newName) {
+      return res.status(400).json({ msg: "Please provide a new name" });
+    }
+    const user = await User.findById(req.userId);
+
+    user.name = newName;
+    await user.save();
+    res.json({
+      user: user,
+      success: true,
+      message: "Name updated successfully.",
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
