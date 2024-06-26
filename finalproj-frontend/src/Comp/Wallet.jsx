@@ -31,13 +31,13 @@ const Wallet = () => {
           })
           .catch((err) => {
             console.error(err);
-            console.alert("Could not verify payment");
+            alert("Could not verify payment");
           });
       },
     });
 
     handler.openIframe();
-    navigate('/enter-card-details', { state: { amount } });
+    navigate("/enter-card-details", { state: { amount } });
   };
 
   return (
@@ -58,11 +58,15 @@ const Wallet = () => {
               Wallet - {user.name}
             </h1>
             <div className="text-left mb-4">
-              <h2 className="text-xl font-semibold text-white">Wallet address (email):</h2>
+              <h2 className="text-xl font-semibold text-white">
+                Wallet address (email):
+              </h2>
               <p className="text-lg text-black">{user.email}</p>
             </div>
             <div className="text-left mb-8">
-              <h2 className="text-xl font-semibold text-white">Current Balance:</h2>
+              <h2 className="text-xl font-semibold text-white">
+                Current Balance:
+              </h2>
               <p className="text-lg text-black">
                 {formatCurrency(user.walletBalance / 100)}
               </p>

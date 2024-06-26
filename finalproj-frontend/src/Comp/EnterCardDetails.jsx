@@ -1,26 +1,32 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { FiArrowLeft, FiCreditCard } from 'react-icons/fi';
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { FiArrowLeft, FiCreditCard } from "react-icons/fi";
+import { toast } from "sonner";
 
 const EnterCardDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { amount } = location.state || {};
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [cvv, setCvv] = useState('');
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+  const [cvv, setCvv] = useState("");
 
   const handlePayment = (e) => {
     e.preventDefault();
     // Handle payment logic here
-    alert(`Amount: ${amount}, Card Number: ${cardNumber}, Expiry Date: ${expiryDate}, CVV: ${cvv}`);
+    toast.success(
+      `Amount: ${amount}, Card Number: ${cardNumber}, Expiry Date: ${expiryDate}, CVV: ${cvv}`
+    );
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500 text-white font-agrandir">
       <main className="text-center p-6 w-full max-w-md bg-white bg-opacity-25 rounded-lg shadow-lg">
         <div className="flex items-center justify-between mb-8">
-          <button onClick={() => navigate('/load-wallet')} className="text-white hover:text-gray-300 transition duration-200">
+          <button
+            onClick={() => navigate("/load-wallet")}
+            className="text-white hover:text-gray-300 transition duration-200"
+          >
             <FiArrowLeft className="text-3xl" />
           </button>
           <h1 className="text-3xl font-bold text-white">Enter Card Details</h1>
@@ -28,7 +34,12 @@ const EnterCardDetails = () => {
         </div>
         <form onSubmit={handlePayment} className="space-y-6">
           <div className="relative">
-            <label htmlFor="cardNumber" className="block text-white text-left mb-2">Card Number</label>
+            <label
+              htmlFor="cardNumber"
+              className="block text-white text-left mb-2"
+            >
+              Card Number
+            </label>
             <input
               type="text"
               id="cardNumber"
@@ -40,7 +51,12 @@ const EnterCardDetails = () => {
             />
           </div>
           <div className="relative">
-            <label htmlFor="expiryDate" className="block text-white text-left mb-2">Expiry Date</label>
+            <label
+              htmlFor="expiryDate"
+              className="block text-white text-left mb-2"
+            >
+              Expiry Date
+            </label>
             <input
               type="text"
               id="expiryDate"
@@ -52,7 +68,9 @@ const EnterCardDetails = () => {
             />
           </div>
           <div className="relative">
-            <label htmlFor="cvv" className="block text-white text-left mb-2">CVV</label>
+            <label htmlFor="cvv" className="block text-white text-left mb-2">
+              CVV
+            </label>
             <input
               type="text"
               id="cvv"
