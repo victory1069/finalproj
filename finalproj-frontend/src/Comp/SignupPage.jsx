@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from '../axiosConifg';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const SignupPage = () => {
   const [name, setName] = useState('');
@@ -8,6 +9,7 @@ const SignupPage = () => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isServiceProvider, setIsServiceProvider] = useState(false);
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
@@ -17,8 +19,8 @@ const SignupPage = () => {
       return;
     }
     try {
-      await axios.post('/auth/signup', { name, email, phone, password });
-      alert('Registration successful');
+      await axios.post('/auth/signup', { name, email, phone, password, isServiceProvider });
+      toast.success('Registration successful');
       navigate('/authentication');
     } catch (err) {
       alert(res.data);
@@ -35,7 +37,7 @@ const SignupPage = () => {
             <input
               type="text"
               id="name"
-              placeholder="Enter your firstname"
+              placeholder="Enter your Name"
               className="w-full bg-transparent border-b-2 border-white text-white p-2 focus:outline-none focus:border-blue-300"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -85,6 +87,22 @@ const SignupPage = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
+          </div>
+          <div className="w-full flex justify-start">
+            <label htmlFor="isServiceProvider" className='flex gap-2 items-center'>
+              <input
+                type="checkbox"
+                id="isServiceProvider"
+                className="w-4 h-4"
+                value={isServiceProvider}
+                onChange={(e) => setIsServiceProvider(e.target.value)}
+                name="isServiceProvider"
+              />
+              <span>
+
+                Are You a Service Provider?
+              </span>
+            </label>
           </div>
           <button
             type="submit"
