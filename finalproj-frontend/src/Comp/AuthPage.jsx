@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import axios from '../axiosConifg';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
+import { toast } from 'sonner';
 
 const AuthPage = () => {
   const { setUser } = useUser()
@@ -15,7 +16,7 @@ const AuthPage = () => {
       const res = (await axios.post('/auth/login', { email: emailOrPhone, password })).data;
       localStorage.setItem('loggedInUser', JSON.stringify(res.data.user));
       setUser(res.data.user)
-      alert('Login successful');
+      toast.success('Login successful');
       navigate('/dashboard');
     } catch (err) {
       console.error(err.response.data);
