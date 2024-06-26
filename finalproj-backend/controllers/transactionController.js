@@ -7,7 +7,7 @@ exports.retrieveTransactions = async (req, res) => {
     if (!user) throw new Error("User not found");
     const transactions = await Transaction.find({
       $or: [{ senderEmail: user.email }, { recipientEmail: user.email }],
-    });
+    }).sort({ createdAt: -1 });
 
     res.json({ success: true, data: { transactions } });
   } catch (err) {

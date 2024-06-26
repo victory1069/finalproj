@@ -7,9 +7,9 @@ import { toast } from "sonner";
 
 const ServicePayment = () => {
   const [paymentMethod, setPaymentMethod] = useState("wallet");
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(0);
   const navigate = useNavigate();
-  const { user } = useUser()
+  const { user, setUser } = useUser()
   const [serviceProviders, setServiceProviders] = useState([])
   const [selectedServiceProviderId, setSelectedServiceProvider] = useState(undefined);
   const [selectedServiceProviderObject, setSelectedServiceProviderObject] = useState(undefined);
@@ -27,32 +27,78 @@ const ServicePayment = () => {
     setSelectedServiceProviderObject(serviceProviders.find(serviceProvider => serviceProvider._id === selectedServiceProviderId))
   }, [selectedServiceProviderId])
 
-  const handleServicePayment = useCallback(async (e) => {
-    e.preventDefault();
+  const handleWalletPayment = useCallback(async (amount, email) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
         'x-auth-token': user._id
       }
     };
+    const res = await axiosInstance.post(
+      "/payment/transfer-to-user",
+      { amount: parseFloat(amount) * 100, email },
+      config
+    );
+    return res
+    // we depend on the user variable because we use user._id
+  }, [user])
 
+  const handleCardPayment = useCallback(async (amount, senderEmail, recipientEmail) => {
+    const res = await new Promise((resolve, reject) => {
+
+      let handler = PaystackPop.setup({
+        key: "pk_test_31f7956563c471afc54134f22435bff182b71bc6", // Replace with your public key
+        email: senderEmail,
+        amount: amount * 100,
+        onClose: function () {
+          toast.info("Payment Window closed.");
+        },
+        callback: function (response) {
+          let message = "Payment complete! Reference: " + response.reference;
+          axiosInstance
+            .post("/payment/verify", { reference: response.reference })
+            .then((res) => {
+              setUser(res.data.user);
+              setAmount(0);
+              toast.success(message);
+            }).then(async () => {
+              await handleWalletPayment(amount, recipientEmail).then(res => {
+                resolve(res)
+              })
+            })
+            .catch((err) => {
+              console.error(err);
+              toast.error("Could not verify payment");
+              reject(err);
+            });
+        },
+      });
+      handler.openIframe();
+    })
+    return res
+  }, [handleWalletPayment]);
+
+  const handleServicePayment = useCallback(async (e) => {
+    e.preventDefault();
     try {
       let res;
       if (paymentMethod === "wallet") {
-        res = await axiosInstance.post(
-          "/payment/transfer-to-user",
-          { amount: parseFloat(amount) * 100, email: selectedServiceProviderObject.email },
-          config
-        );
+        res = await handleWalletPayment(amount, selectedServiceProviderObject.email)
       } else {
-        // do a paystack ting
+        console.log(user.email)
+        res = await handleCardPayment(amount, user.email, selectedServiceProviderObject.email)
       }
+      console.log(res)
       toast.success(`Payment successful: ${res.data.data.message}`);
     } catch (err) {
       console.error(err);
       toast.error("Error making payment");
     }
-  }, [selectedServiceProviderObject, user]);
+  }, [selectedServiceProviderObject, user, amount, paymentMethod, handleWalletPayment, handleCardPayment]);
+
+
+
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white font-agrandir">
