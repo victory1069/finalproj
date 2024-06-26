@@ -1,5 +1,6 @@
 const Transaction = require("../models/Transaction");
 const User = require("../models/User");
+const { formatCurrency } = require("../utilities");
 
 exports.payWithCard = async (req, res) => {
   const { cardDetails, amount } = req.body;
@@ -70,7 +71,9 @@ exports.transferToUser = async (req, res) => {
     await transaction.save();
     res.status(200).json({
       msg: "Transaction successful",
-      info: `You sent ${transferAmount.toFixed(2)} to ${recipientEmail}`,
+      info: `You sent ${formatCurrency(transferAmount / 100)} to ${
+        recipient.name
+      }`,
     });
   } catch (err) {
     console.error(err.message);

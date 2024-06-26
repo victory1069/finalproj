@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FiCreditCard, FiBook, FiArrowLeft } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../axiosConifg';
@@ -27,7 +27,7 @@ const ServicePayment = () => {
     setSelectedServiceProviderObject(serviceProviders.find(serviceProvider => serviceProvider._id === selectedServiceProviderId))
   }, [selectedServiceProviderId])
 
-  const handleServicePayment = async (e) => {
+  const handleServicePayment = useCallback(async (e) => {
     e.preventDefault();
     const config = {
       headers: {
@@ -39,28 +39,21 @@ const ServicePayment = () => {
     try {
       let res;
       if (paymentMethod === "wallet") {
-        res = await axios.post(
-          "/api/payment/pay-with-wallet",
-          { amount },
+        res = await axiosInstance.post(
+          "/payment/transfer-to-user",
+          { amount: parseFloat(amount) * 100, email: selectedServiceProviderObject.email },
           config
         );
       } else {
-        const cardDetails = {
-          /* Card details here */
-        };
-        res = await axios.post(
-          "/api/payment/pay-with-card",
-          { cardDetails, amount },
-          config
-        );
+        // do a paystack ting
       }
       console.log(res.data);
       toast.success("Payment successful");
     } catch (err) {
-      console.error(err.response.data);
+      console.error(err);
       toast.error("Error making payment");
     }
-  };
+  }, [selectedServiceProviderObject, user]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white font-agrandir">
