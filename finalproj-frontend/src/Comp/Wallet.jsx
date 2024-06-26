@@ -41,7 +41,7 @@ const Wallet = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500 text-white font-agrandir">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white font-agrandir">
       <main className="text-center p-6 w-full max-w-md bg-white bg-opacity-25 rounded-lg shadow-lg">
         <div className="flex items-center justify-between mb-8">
           <button
@@ -58,13 +58,13 @@ const Wallet = () => {
               Wallet - {user.name}
             </h1>
             <div className="text-left mb-4">
-              <h2 className="text-xl font-semibold text-white">
+              <h2 className="text-xl font-semibold text-black">
                 Wallet address (email):
               </h2>
-              <p className="text-lg text-black">{user.email}</p>
+              <p className="text-lg =">{user.email}</p>
             </div>
             <div className="text-left mb-8">
-              <h2 className="text-xl font-semibold text-white">
+              <h2 className="text-xl font-semibold text-black">
                 Current Balance:
               </h2>
               <p className="text-lg text-black">
@@ -80,7 +80,7 @@ const Wallet = () => {
               <div className="relative">
                 <label
                   htmlFor="amount"
-                  className="block text-white text-left mb-2"
+                  className="block text-black text-left mb-2"
                 >
                   Load Wallet (<span className="line-through">N</span>)
                 </label>
