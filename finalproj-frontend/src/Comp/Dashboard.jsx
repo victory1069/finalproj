@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useUser } from "../contexts/UserContext";
 
 import {
   FiLogOut,
@@ -11,6 +12,7 @@ import {
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { user } = useUser();
 
   const handleSignout = () => {
     localStorage.removeItem("loggedInUser");
@@ -43,12 +45,23 @@ const Dashboard = () => {
               <h2 className="text-2xl font-semibold mb-4">Transfer</h2>
             </div>
           </Link>
-          <Link to="/service-payment" className="text-blue-500 underline">
-            <div className="bg-white bg-opacity-75 p-6 rounded-lg shadow-lg text-black">
-              <FiCreditCard className="text-4xl mb-4 mx-auto text-blue-500" />
-              <h2 className="text-2xl font-semibold mb-4">Service Payment</h2>
-            </div>
-          </Link>
+
+          {user?.isServiceProvider ? (
+            <Link to="/manage-service" className="text-blue-500 underline">
+              <div className="bg-white bg-opacity-75 p-6 rounded-lg shadow-lg text-black">
+                <FiCreditCard className="text-4xl mb-4 mx-auto text-blue-500" />
+                <h2 className="text-2xl font-semibold mb-4">Service</h2>
+              </div>
+            </Link>
+          ) : (
+            <Link to="/service-payment" className="text-blue-500 underline">
+              <div className="bg-white bg-opacity-75 p-6 rounded-lg shadow-lg text-black">
+                <FiCreditCard className="text-4xl mb-4 mx-auto text-blue-500" />
+                <h2 className="text-2xl font-semibold mb-4">Service Payment</h2>
+              </div>
+            </Link>
+          )}
+
           <Link to="/history" className="text-blue-500 underline">
             <div className="bg-white bg-opacity-75 p-6 rounded-lg shadow-lg text-black">
               <FiPaperclip className="text-4xl mb-4 mx-auto text-blue-500" />
@@ -75,4 +88,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

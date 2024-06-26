@@ -20,6 +20,7 @@ import { useUser } from "./contexts/UserContext";
 import axiosInstance from "./axiosConifg";
 import Transfer from "./Comp/Transfer";
 import TransactionHistory from "./Comp/TransactionHistory";
+import ManageService from "./Comp/ManageService";
 
 function App() {
   const navigate = useNavigate();
@@ -70,6 +71,7 @@ function App() {
           <Route path="/transfer" element={<Transfer />} />
           <Route path="/history" element={<TransactionHistory />} />
           <Route path="/transaction-history" element={<TransactionHistory />} />
+          <Route path="/manage-service" element={<ManageService />} />
         </Routes>
       </div>
     </div>
