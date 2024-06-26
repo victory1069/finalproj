@@ -37,10 +37,10 @@ const TransactionHistory = () => {
         </div>
 
         <div className="flex flex-col gap-6 max-h-96 overflow-auto">
-          {transactions.length > 0 ? transactions.map((transaction, i) => (
+          {transactions.length > 0 ? transactions.map((transaction, index, array) => (
             <div
-              key={i}
-              className="flex justify-between items-center px-6 border-b"
+              key={transaction._id + index}
+              className={`flex justify-between items-center px-6 ${index !== array.length - 1 ? "border-b" : ""}`}
             >
               <div className="flex flex-col items-start gap-3 py-2">
                 <div>
