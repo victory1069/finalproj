@@ -24,9 +24,9 @@ const TransactionHistory = () => {
     })
   }, [user])
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500 text-white font-agrandir">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white font-agrandir">
       <main className="text-center w-full max-w-md bg-white bg-opacity-25 rounded-lg shadow-lg">
-        <div className="flex items-center justify-between mb-8 p-6">
+        <div className="flex items-center justify-between p-6">
           <button
             onClick={() => navigate(-1)}
             className="text-white hover:text-gray-300 transition duration-200"
@@ -37,7 +37,7 @@ const TransactionHistory = () => {
         </div>
 
         <div className="flex flex-col gap-6 max-h-96 overflow-auto">
-          {transactions.map((transaction, i) => (
+          {transactions.length > 0 ? transactions.map((transaction, i) => (
             <div
               key={i}
               className="flex justify-between items-center px-6 border-b"
@@ -47,7 +47,7 @@ const TransactionHistory = () => {
               </div>
               <div className="text-1xl font-bold py-2 ">{formatCurrency(transaction.amount / 100)}</div>
             </div>
-          ))}
+          )) : <div class="flex justify-center items-center py-6 text-xl">You have no transactions right now</div>}
         </div>
       </main>
     </div>
