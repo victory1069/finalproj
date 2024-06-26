@@ -46,7 +46,7 @@ const ServicePayment = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500 text-white font-agrandir">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white font-agrandir">
       <main className="text-center p-6 w-full max-w-md bg-white bg-opacity-25 rounded-lg shadow-lg">
         <div className="flex items-center justify-between mb-8">
           <button

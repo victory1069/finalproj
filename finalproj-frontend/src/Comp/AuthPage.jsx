@@ -27,7 +27,7 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-500 font-agrandir">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black font-agrandir placeholder:text-black">
       <main className="text-center p-6 w-full max-w-md bg-white bg-opacity-50 rounded-lg shadow-lg">
         <form
           onSubmit={handleSignIn}
@@ -36,7 +36,7 @@ const AuthPage = () => {
           <input
             type="text"
             placeholder="Enter your email or phone number"
-            className="w-full mb-4 p-2 border-b-2 border-gray-300 rounded bg-transparent text-black focus:outline-none focus:border-blue-300"
+            className="w-full mb-4 p-2 border-b-2 border-gray-300 rounded bg-transparent text-black focus:outline-none focus:border-blue-300 placeholder:text-slate-800"
             value={emailOrPhone}
             onChange={(e) => setEmailOrPhone(e.target.value)}
             required
@@ -44,7 +44,7 @@ const AuthPage = () => {
           <input
             type="password"
             placeholder="Enter your password"
-            className="w-full mb-4 p-2 border-b-2 border-gray-300 rounded bg-transparent text-black focus:outline-none focus:border-blue-300"
+            className="w-full mb-4 p-2 border-b-2 border-gray-300 rounded bg-transparent text-black focus:outline-none focus:border-blue-300 placeholder:text-slate-800"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -55,10 +55,16 @@ const AuthPage = () => {
           >
             Sign In
           </button>
-          <a href="/forgot-password" className="block mt-4 text-blue-500">
+          <a
+            href="/forgot-password"
+            className="inline-block mt-4 text-black transition-all duration-150 hover:scale-105"
+          >
             Forgot Password?
           </a>
-          <a href="/signup" className="block mt-2 text-blue-500">
+          <a
+            href="/signup"
+            className="inline-block mt-2 text-black transition-all duration-150 hover:scale-105"
+          >
             Don't have an Account yet?
           </a>
         </form>
