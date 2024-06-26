@@ -1,32 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../contexts/UserContext";
+import axiosInstance from "../axiosConifg";
+import { toast } from 'sonner'
+import { formatCurrency } from "../utilities";
 
 const TransactionHistory = () => {
   //use transaction id for key
   const navigate = useNavigate();
-  const [transactions, setTransactions] = useState([
-    {
-      sender: "uwaishem@gmail.com",
-      receiver: "tochieatsbeats@gmail.com",
-      amount: "+300",
-    },
-    {
-      sender: "uwaishem@gmail.com",
-      receiver: "tochieatsbeats@gmail.com",
-      amount: "-400",
-    },
-    {
-      sender: "uwaishem@gmail.com",
-      receiver: "tochieatsbeats@gmail.com",
-      amount: "+300",
-    },
-    {
-      sender: "uwaishem@gmail.com",
-      receiver: "tochieatsbeats@gmail.com",
-      amount: "-900",
-    },
-  ]);
+  const [transactions, setTransactions] = useState([]);
+  const { user } = useUser()
+
+  useEffect(() => {
+    if (!user) return;
+    axiosInstance.get("/transactions",
+      { headers: { "x-auth-token": user._id } }
+    ).then(res => {
+      setTransactions(res.data.data.transactions)
+    }).catch(err => {
+      console.error(err)
+      toast.error(`Unable to get transactions: ${err.message} /n Please contact an administrator`)
+    })
+  }, [user])
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500 text-white font-agrandir">
       <main className="text-center w-full max-w-md bg-white bg-opacity-25 rounded-lg shadow-lg">
@@ -41,16 +37,15 @@ const TransactionHistory = () => {
         </div>
 
         <div className="flex flex-col gap-6 max-h-96 overflow-auto">
-          {Array.from({ length: 10 }).map((transaction, i) => (
+          {transactions.map((transaction, i) => (
             <div
               key={i}
               className="flex justify-between items-center px-6 border-b"
             >
-              <div className="flex flex-col items-start gap-3 py-2 ">
-                <div>To:</div>
-                <div>From:</div>
+              <div className="flex flex-col items-start gap-3 py-2">
+                <div>{transaction.description}</div>
               </div>
-              <div className="text-5xl font-bold py-2 ">+300</div>
+              <div className="text-1xl font-bold py-2 ">{formatCurrency(transaction.amount / 100)}</div>
             </div>
           ))}
         </div>
