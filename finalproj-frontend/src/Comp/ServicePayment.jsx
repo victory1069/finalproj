@@ -47,8 +47,7 @@ const ServicePayment = () => {
       } else {
         // do a paystack ting
       }
-      console.log(res.data);
-      toast.success("Payment successful");
+      toast.success(`Payment successful: ${res.data.data.message}`);
     } catch (err) {
       console.error(err);
       toast.error("Error making payment");

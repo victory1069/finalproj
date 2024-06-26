@@ -70,10 +70,12 @@ exports.transferToUser = async (req, res) => {
     });
     await transaction.save();
     res.status(200).json({
-      msg: "Transaction successful",
-      info: `You sent ${formatCurrency(transferAmount / 100)} to ${
-        recipient.name
-      }`,
+      success: true,
+      data: {
+        message: `You sent ${formatCurrency(transferAmount / 100)} to ${
+          recipient.name
+        }`,
+      },
     });
   } catch (err) {
     console.error(err.message);
