@@ -117,7 +117,7 @@ const ProfileUpdate = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black font-agrandir placeholder:text-black">
-      <main className="text-center p-6 w-full max-w-5xl bg-white bg-opacity-50 rounded-lg shadow-lg">
+      <main className="text-center p-6 w-full max-w-5xl bg-white bg-opacity-25 rounded-lg shadow-lg">
         <div className="w-full flex justify-start">
           <button
             onClick={() => navigate(-1)}
