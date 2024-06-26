@@ -4,7 +4,6 @@ import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { useUser } from "../contexts/UserContext";
 import axiosInstance from "../axiosConifg";
 import { formatCurrency } from "../utilities";
-import 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap';
 
 const Wallet = () => {
   const { user, setUser } = useUser();
