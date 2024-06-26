@@ -43,7 +43,9 @@ const TransactionHistory = () => {
               className="flex justify-between items-center px-6 border-b"
             >
               <div className="flex flex-col items-start gap-3 py-2">
-                <div>{transaction.description}</div>
+                <div>
+                  {user.email === transaction.senderEmail ? transaction.descriptionSender : transaction.descriptionRecipient}
+                </div>
               </div>
               <div className="text-1xl font-bold py-2 ">{formatCurrency(transaction.amount / 100)}</div>
             </div>
