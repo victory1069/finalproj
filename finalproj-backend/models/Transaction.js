@@ -6,7 +6,8 @@ const TransactionSchema = new mongoose.Schema(
     recipientEmail: { type: String, required: true },
     amount: { type: Number, required: true },
     isExternal: { type: Boolean, required: true },
-    description: { type: String },
+    descriptionSender: { type: String },
+    descriptionRecipient: { type: String },
   },
   { timestamps: true }
 );

@@ -46,7 +46,7 @@ router.post("/verify", async (req, res) => {
       amount: amount,
       isExternal: true,
       recipientEmail: customer.email,
-      description: "Load Wallet",
+      descriptionRecipient: "Load Wallet",
     });
     await transaction.save();
     await user.save();
