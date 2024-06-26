@@ -7,6 +7,8 @@ import { CiEdit } from "react-icons/ci";
 import { MdOutlineCancel } from "react-icons/md";
 import { RiCheckboxCircleLine } from "react-icons/ri";
 import { AiOutlineLoading } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+import { FiArrowLeft } from "react-icons/fi";
 
 const ProfileUpdate = () => {
   const [isEditNameOpen, setIsEditNameOpen] = useState(false);
@@ -19,6 +21,7 @@ const ProfileUpdate = () => {
   const { user, setUser } = useUser();
   const nameInputRef = useRef(null);
   const passwordInputRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -115,6 +118,15 @@ const ProfileUpdate = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black font-agrandir placeholder:text-black">
       <main className="text-center p-6 w-full max-w-5xl bg-white bg-opacity-50 rounded-lg shadow-lg">
+        <div className="w-full flex justify-start">
+          <button
+            onClick={() => navigate(-1)}
+            className="text-white hover:text-gray-300 transition duration-200"
+          >
+            <FiArrowLeft className="text-3xl" />
+          </button>
+        </div>
+
         <form className="bg-opacity-0 p-8 rounded-lg mx-auto font-agrandir">
           <div className="w-full flex items-center justify-between border-b pb-8">
             <div>
