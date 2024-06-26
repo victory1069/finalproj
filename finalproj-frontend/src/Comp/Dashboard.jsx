@@ -50,7 +50,7 @@ const Dashboard = () => {
             <Link to="/manage-service" className="text-blue-500 underline">
               <div className="bg-white bg-opacity-75 p-6 rounded-lg shadow-lg text-black">
                 <FiCreditCard className="text-4xl mb-4 mx-auto text-blue-500" />
-                <h2 className="text-2xl font-semibold mb-4">Service</h2>
+                <h2 className="text-2xl font-semibold mb-4">Manage Service</h2>
               </div>
             </Link>
           ) : (
