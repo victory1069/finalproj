@@ -1,22 +1,23 @@
-import React, { useState } from 'react';
-import {  FiArrowLeft } from 'react-icons/fi';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { FiArrowLeft } from "react-icons/fi";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/api/auth/forgot-password', { email });
+      const res = await axios.post("/api/auth/forgot-password", { email });
       console.log(res.data);
-      alert('Password reset link sent to your email');
-      navigate('/authentication');
+      toast.success("Password reset link sent to your email");
+      navigate("/authentication");
     } catch (err) {
       console.error(err.response.data);
-      alert('Error sending password reset link');
+      toast.error("Error sending password reset link");
     }
   };
 
@@ -25,7 +26,7 @@ const ForgotPassword = () => {
       <main className="text-center p-6 w-full max-w-md bg-white bg-opacity-25 rounded-lg shadow-lg">
         <div className="flex items-center justify-between mb-8">
           <button
-            onClick={() => navigate('/authentication')}
+            onClick={() => navigate("/authentication")}
             className="text-white hover:text-gray-300 transition duration-200"
           >
             <FiArrowLeft className="text-3xl" />

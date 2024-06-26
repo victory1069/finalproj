@@ -3,6 +3,7 @@ import { FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import axios from "../axiosConifg";
 import { useUser } from "../contexts/UserContext";
+import { toast } from "sonner";
 
 const Transfer = () => {
   const [email, setEmail] = useState("");
@@ -13,11 +14,11 @@ const Transfer = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) {
-      alert("Please Enter Recipient Email");
+      toast.error("Please Enter Recipient Email");
       return;
     }
     if (!amount || isNaN(amount) || amount <= 0) {
-      alert("Please Enter a valid Amount");
+      toast.error("Please Enter a valid Amount");
       return;
     }
     try {
@@ -30,8 +31,9 @@ const Transfer = () => {
           },
         }
       ).data;
+      toast.success("Transfer Successful");
     } catch (err) {
-      console.error(err);
+      toast.error("Transfer Unsuccessful");
     }
   };
 

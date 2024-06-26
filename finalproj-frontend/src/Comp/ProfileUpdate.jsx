@@ -1,27 +1,28 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
+import { toast } from "sonner";
 
 const ProfileUpdate = () => {
-  const [pin, setPin] = useState('');
+  const [pin, setPin] = useState("");
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     // Assuming you have a token stored in localStorage
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     const config = {
       headers: {
-        'Content-Type': 'application/json',
-        'x-auth-token': token
-      }
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+      },
     };
 
     try {
-      const res = await axios.put('/api/user/profile', { pin }, config);
+      const res = await axios.put("/api/user/profile", { pin }, config);
       console.log(res.data);
-      alert('Profile updated successfully');
+      toast.success("Profile updated successfully");
     } catch (err) {
       console.error(err.response.data);
-      alert('Error updating profile');
+      toast.error("Error updating profile");
     }
   };
 
@@ -49,4 +50,3 @@ const ProfileUpdate = () => {
 };
 
 export default ProfileUpdate;
-

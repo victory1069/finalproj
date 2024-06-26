@@ -1,36 +1,47 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { FiCreditCard, FiBook, FiArrowLeft } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import axios from "axios";
+import { FiCreditCard, FiBook, FiArrowLeft } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const ServicePayment = () => {
-  const [paymentMethod, setPaymentMethod] = useState('wallet');
-  const [amount, setAmount] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState("wallet");
+  const [amount, setAmount] = useState("");
   const navigate = useNavigate();
 
   const handleServicePayment = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     const config = {
       headers: {
-        'Content-Type': 'application/json',
-        'x-auth-token': token
-      }
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+      },
     };
 
     try {
       let res;
-      if (paymentMethod === 'wallet') {
-        res = await axios.post('/api/payment/pay-with-wallet', { amount }, config);
+      if (paymentMethod === "wallet") {
+        res = await axios.post(
+          "/api/payment/pay-with-wallet",
+          { amount },
+          config
+        );
       } else {
-        const cardDetails = { /* Card details here */ };
-        res = await axios.post('/api/payment/pay-with-card', { cardDetails, amount }, config);
+        const cardDetails = {
+          /* Card details here */
+        };
+        res = await axios.post(
+          "/api/payment/pay-with-card",
+          { cardDetails, amount },
+          config
+        );
       }
       console.log(res.data);
-      alert('Payment successful');
+      toast.success("Payment successful");
     } catch (err) {
       console.error(err.response.data);
-      alert('Error making payment');
+      toast.error("Error making payment");
     }
   };
 
@@ -48,7 +59,9 @@ const ServicePayment = () => {
         </div>
         <form onSubmit={handleServicePayment} className="space-y-6">
           <div className="relative">
-            <label htmlFor="amount" className="block text-white text-left mb-2">Amount</label>
+            <label htmlFor="amount" className="block text-white text-left mb-2">
+              Amount
+            </label>
             <input
               type="number"
               id="amount"
@@ -60,19 +73,29 @@ const ServicePayment = () => {
             />
           </div>
           <div className="relative">
-            <label className="block text-white text-left mb-2">Payment Method</label>
+            <label className="block text-white text-left mb-2">
+              Payment Method
+            </label>
             <div className="flex justify-center space-x-4">
               <button
                 type="button"
-                className={`p-2 rounded-full focus:outline-none ${paymentMethod === 'wallet' ? 'bg-blue-300' : 'bg-white bg-opacity-50'}`}
-                onClick={() => setPaymentMethod('wallet')}
+                className={`p-2 rounded-full focus:outline-none ${
+                  paymentMethod === "wallet"
+                    ? "bg-blue-300"
+                    : "bg-white bg-opacity-50"
+                }`}
+                onClick={() => setPaymentMethod("wallet")}
               >
                 <FiBook className="text-2xl" />
               </button>
               <button
                 type="button"
-                className={`p-2 rounded-full focus:outline-none ${paymentMethod === 'card' ? 'bg-blue-300' : 'bg-white bg-opacity-50'}`}
-                onClick={() => setPaymentMethod('card')}
+                className={`p-2 rounded-full focus:outline-none ${
+                  paymentMethod === "card"
+                    ? "bg-blue-300"
+                    : "bg-white bg-opacity-50"
+                }`}
+                onClick={() => setPaymentMethod("card")}
               >
                 <FiCreditCard className="text-2xl" />
               </button>
