@@ -72,9 +72,10 @@ exports.transferToUser = async (req, res) => {
       descriptionRecipient: recipient.isServiceProvider
         ? `Payment from ${recipient.name}`
         : `Transfer from ${recipientEmail}`,
+      senderEmail: user.email,
       recipientEmail,
       isExternal: false,
-      senderEmail: user.email,
+      isServicePayment: recipient.isServiceProvider ? true : false,
       subServiceId,
       subServiceName,
     });

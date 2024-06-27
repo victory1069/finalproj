@@ -44,9 +44,8 @@ const TransactionHistory = () => {
             transactions.map((transaction, index, array) => (
               <div
                 key={transaction._id + index}
-                className={`flex justify-between items-center px-6 ${
-                  index !== array.length - 1 ? "border-b" : ""
-                }`}
+                className={`flex justify-between items-center px-6 ${index !== array.length - 1 ? "border-b" : ""
+                  }`}
               >
                 <div className="flex flex-col items-start gap-3 py-2">
                   <div>
@@ -54,6 +53,7 @@ const TransactionHistory = () => {
                       ? transaction.descriptionSender
                       : transaction.descriptionRecipient}
                   </div>
+                  {transaction.isServicePayment ? <div>For: <span>{transaction.subServiceName}</span></div> : undefined}
                 </div>
                 <div className="text-1xl font-bold py-2 ">
                   {formatCurrency(transaction.amount / 100)}
