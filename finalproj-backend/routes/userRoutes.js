@@ -14,7 +14,7 @@ router.put("/updatePassword", auth, updatePassword);
 router.put("/updateUsername", auth, updateUsername);
 // router.get("/serviceProviders", auth, listServiceProviders);
 router.post("/createNewService", auth, createNewService);
-router.get("/listServices", listServices);
+router.get("/listServices", auth, listServices);
 
 router.get("/", auth, async (req, res) => {
   try {

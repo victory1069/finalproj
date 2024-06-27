@@ -41,7 +41,6 @@ function App() {
         .then((res) => {
           localStorage.setItem("loggedInUser", JSON.stringify(res.data));
           setUser(res.data);
-          console.log(res);
         });
       if (location.pathname === "/") navigate("/dashboard");
     } catch (e) {

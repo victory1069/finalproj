@@ -7,21 +7,19 @@ import { toast } from "sonner";
 
 const ServicePayment = () => {
   const [paymentMethod, setPaymentMethod] = useState("wallet");
-  const [amount, setAmount] = useState(0);
   const navigate = useNavigate();
   const { user, setUser } = useUser();
-  const [allServices, setAllServices] = useState([]);
-  const [selectedService, setSelectedService] = useState(null);
-  const [serviceDropDownData, setServiceDropDownData] = useState(null);
-  const [serviceForPayment, setServiceForPayment] = useState();
+  const [allServiceProviders, setAllServiceProviders] = useState([]);
+  const [selectedServiceProvider, setSelectedServiceProvider] = useState(null);
+  const [subServiceDropDownData, setSubServiceDropDownData] = useState(null);
+  const [subServiceForPayment, setSubServiceForPayment] = useState();
 
   useEffect(() => {
     if (!user) return;
     axiosInstance
       .get("/user/listServices", { headers: { "x-auth-token": user._id } })
       .then((res) => {
-        setAllServices(res.data.data.services);
-        console.log(allServices);
+        setAllServiceProviders(res.data.data.services);
       })
       .catch((err) => {
         toast.error(`Error getting service providers: ${err.message}`);
@@ -29,12 +27,12 @@ const ServicePayment = () => {
   }, [user]);
 
   useEffect(() => {
-    console.log(selectedService);
-    setServiceDropDownData(selectedService?.services);
-  }, [selectedService]);
+    if (!selectedServiceProvider) return;
+    setSubServiceDropDownData(selectedServiceProvider.services);
+  }, [selectedServiceProvider]);
 
   const handleWalletPayment = useCallback(
-    async (amount, email) => {
+    async (email, subServiceForPayment) => {
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -43,7 +41,7 @@ const ServicePayment = () => {
       };
       const res = await axiosInstance.post(
         "/payment/transfer-to-user",
-        { amount: parseFloat(amount) * 100, email },
+        { amount: parseFloat(subServiceForPayment.amount) * 100, email, subServiceName: subServiceForPayment.serviceName },
         config
       );
       return res;
@@ -52,17 +50,13 @@ const ServicePayment = () => {
     [user]
   );
 
-  const handleServiceSelection = (ownerId) => {
-    setSelectedService(ownerId);
-  };
-
   const handleCardPayment = useCallback(
-    async (amount, senderEmail, recipientEmail) => {
+    async (senderEmail, recipientEmail, subServiceForPayment) => {
       const res = await new Promise((resolve, reject) => {
         let handler = PaystackPop.setup({
           key: "pk_test_31f7956563c471afc54134f22435bff182b71bc6", // Replace with your public key
           email: senderEmail,
-          amount: amount * 100,
+          amount: subServiceForPayment.amount * 100,
           onClose: function () {
             toast.info("Payment Window closed.");
           },
@@ -72,28 +66,19 @@ const ServicePayment = () => {
               .post("/payment/verify", { reference: response.reference })
               .then((res) => {
                 setUser(res.data.user);
-                setAmount(0);
                 toast.success(message);
               })
               .then(async () => {
-                await handleWalletPayment(amount, recipientEmail).then(
+                await handleWalletPayment(recipientEmail, subServiceForPayment).then(
                   (res) => {
                     resolve(res);
                   }
                 );
-                setSelectedService(null);
-                setServiceDropDownData(null);
-                setServiceForPayment(null);
-                setAmount(0);
               })
               .catch((err) => {
                 console.error(err);
                 toast.error("Could not verify payment");
                 reject(err);
-                setSelectedService(null);
-                setServiceDropDownData(null);
-                setServiceForPayment(null);
-                setAmount(0);
               });
           },
         });
@@ -110,34 +95,31 @@ const ServicePayment = () => {
       try {
         let res;
         if (paymentMethod === "wallet") {
-          res = await handleWalletPayment(amount, selectedService.ownerEmail);
+          res = await handleWalletPayment(selectedServiceProvider.ownerEmail, subServiceForPayment);
         } else {
-          console.log(user.email);
           res = await handleCardPayment(
-            amount,
             user.email,
-            selectedService.ownerEmail
+            selectedServiceProvider.ownerEmail,
+            subServiceForPayment
           );
         }
-        console.log(res);
         toast.success(`Payment successful: ${res.data.data.message}`);
       } catch (err) {
         console.error(err);
         toast.error("Error making payment");
       } finally {
-        setSelectedService(null);
-        setServiceDropDownData(null);
-        setServiceForPayment(null);
-        setAmount(0);
+        setSelectedServiceProvider(undefined);
+        setSubServiceDropDownData(undefined);
+        setSubServiceForPayment(undefined);
       }
     },
     [
-      selectedService,
+      selectedServiceProvider,
       user,
-      amount,
       paymentMethod,
       handleWalletPayment,
       handleCardPayment,
+      subServiceForPayment
     ]
   );
 
@@ -156,45 +138,52 @@ const ServicePayment = () => {
         <form onSubmit={handleServicePayment} className="space-y-6">
           <div className="relative">
             Click to select a service
-            <div className="grid grid-cols-2 gap-4 mt-3">
-              {allServices.map((service, index) => (
-                <div
-                  className={`p-4 ${
-                    selectedService?.ownerId == service.ownerId
-                      ? "bg-blue-500"
-                      : "bg-black"
-                  } rounded-lg cursor-pointer`}
-                  onClick={() => handleServiceSelection(service)}
-                  key={index}
+            <select
+              required
+              onChange={(e) => {
+                const foundService = allServiceProviders.find((s) => s.ownerId === e.target.value)
+                setSelectedServiceProvider(foundService)
+              }}
+              value={selectedServiceProvider?.ownerId}
+              name="paymentService"
+              id="parentService"
+              className="w-full bg-transparent border-b-2 border-white text-white p-2 focus:outline-none focus:border-blue-300 cursor-pointer">
+              <option value={undefined} className="text-black cursor-pointer">
+                Select Service Provider
+              </option>
+              {allServiceProviders.map((service, index) => (
+                <option
+                  className="text-black cursor-pointer"
+                  value={service.ownerId}
+                  key={service.ownerName + index}
                 >
                   {service.ownerName}
-                </div>
+                </option>
               ))}
-            </div>
+            </select>
           </div>
-          {serviceDropDownData?.length > 0 && (
+          {subServiceDropDownData?.length > 0 && (
             <div>
               <select
                 id="service"
-                className="w-full bg-transparent border-b-2 border-white text-white p-2 focus:outline-none focus:border-blue-300"
+                className="w-full bg-transparent border-b-2 border-white text-white p-2 focus:outline-none focus:border-blue-300 cursor-pointer"
                 onChange={(e) => {
-                  const selected = serviceDropDownData.find(
-                    (service) => service.serviceName === e.target.value
+                  const selected = subServiceDropDownData.find(
+                    (service) => service.serviceId === e.target.value
                   );
-                  setServiceForPayment(selected);
-                  setAmount(selected.amount);
+                  setSubServiceForPayment(selected);
                 }}
-                value={serviceForPayment ? serviceForPayment.serviceName : ""}
+                value={subServiceForPayment?.serviceId}
                 required
               >
-                <option value="" disabled>
+                <option value={undefined} className="text-black">
                   Select Payment to make
                 </option>
-                {serviceDropDownData.map((service, index) => (
+                {subServiceDropDownData.map((service, index) => (
                   <option
                     key={index}
-                    value={service.ownerId}
-                    className="text-black"
+                    value={service.serviceId}
+                    className="text-black cursor-pointer"
                   >
                     {service.serviceName}
                   </option>
@@ -212,7 +201,7 @@ const ServicePayment = () => {
               id="amount"
               placeholder="Enter amount"
               className="w-full bg-transparent border-b-2 border-white text-white p-2 focus:outline-none focus:border-blue-300"
-              value={amount}
+              value={subServiceForPayment?.amount}
               readOnly
             />
           </div>
@@ -223,11 +212,10 @@ const ServicePayment = () => {
             <div className="flex justify-center space-x-4">
               <button
                 type="button"
-                className={`flex justify-center gap-3 p-2 rounded-full focus:outline-none ${
-                  paymentMethod === "wallet"
-                    ? "bg-blue-300"
-                    : "bg-white bg-opacity-50"
-                }`}
+                className={`flex justify-center gap-3 p-2 rounded-full focus:outline-none ${paymentMethod === "wallet"
+                  ? "bg-blue-300"
+                  : "bg-white bg-opacity-50"
+                  }`}
                 onClick={() => setPaymentMethod("wallet")}
               >
                 <FiBook className="text-2xl" />
@@ -235,11 +223,10 @@ const ServicePayment = () => {
               </button>
               <button
                 type="button"
-                className={`flex justify-center gap-3 p-2 rounded-full focus:outline-none ${
-                  paymentMethod === "card"
-                    ? "bg-blue-300"
-                    : "bg-white bg-opacity-50"
-                }`}
+                className={`flex justify-center gap-3 p-2 rounded-full focus:outline-none ${paymentMethod === "card"
+                  ? "bg-blue-300"
+                  : "bg-white bg-opacity-50"
+                  }`}
                 onClick={() => setPaymentMethod("card")}
               >
                 <FiCreditCard className="text-2xl" />

@@ -12,7 +12,6 @@ const ForgotPassword = () => {
     e.preventDefault();
     try {
       const res = await axios.post("/api/auth/forgot-password", { email });
-      console.log(res.data);
       toast.success("Password reset link sent to your email");
       navigate("/authentication");
     } catch (err) {

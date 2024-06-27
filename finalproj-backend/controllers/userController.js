@@ -9,6 +9,8 @@ exports.listServices = async (req, res) => {
           _id: "$ownerId",
           services: {
             $push: {
+              serviceId: "$_id",
+              ownerId: "$ownerId",
               serviceName: "$serviceName",
               amount: "$amount",
             },
