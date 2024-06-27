@@ -41,7 +41,7 @@ const ServicePayment = () => {
       };
       const res = await axiosInstance.post(
         "/payment/transfer-to-user",
-        { amount: parseFloat(subServiceForPayment.amount) * 100, email, subServiceName: subServiceForPayment.serviceName },
+        { amount: parseFloat(subServiceForPayment.amount) * 100, email, subServiceName: subServiceForPayment.serviceName, subServiceId: subServiceForPayment.serviceId },
         config
       );
       return res;

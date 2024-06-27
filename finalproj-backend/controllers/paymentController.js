@@ -31,7 +31,12 @@ exports.payWithWallet = async (req, res) => {
 };
 
 exports.transferToUser = async (req, res) => {
-  const { amount, email: recipientEmail } = req.body;
+  const {
+    amount,
+    email: recipientEmail,
+    subServiceName,
+    subServiceId,
+  } = req.body;
 
   try {
     const user = await User.findById(req.userId);
@@ -70,6 +75,8 @@ exports.transferToUser = async (req, res) => {
       recipientEmail,
       isExternal: false,
       senderEmail: user.email,
+      subServiceId,
+      subServiceName,
     });
     await transaction.save();
     res.status(200).json({

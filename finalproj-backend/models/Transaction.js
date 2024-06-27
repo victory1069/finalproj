@@ -8,6 +8,8 @@ const TransactionSchema = new mongoose.Schema(
     isExternal: { type: Boolean, required: true },
     descriptionSender: { type: String },
     descriptionRecipient: { type: String },
+    subServiceId: { type: String },
+    subServiceName: { type: String },
   },
   { timestamps: true }
 );
