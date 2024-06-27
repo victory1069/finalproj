@@ -36,6 +36,7 @@ exports.listServices = async (req, res) => {
           _id: 0,
           ownerId: "$_id",
           ownerName: "$ownerDetails.name",
+          ownerEmail: "$ownerDetails.email",
           services: 1,
         },
       },

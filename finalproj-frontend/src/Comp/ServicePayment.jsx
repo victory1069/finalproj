@@ -10,20 +10,28 @@ const ServicePayment = () => {
   const [amount, setAmount] = useState(0);
   const navigate = useNavigate();
   const { user, setUser } = useUser();
-  const [services, setServices] = useState([]);
+  const [allServices, setAllServices] = useState([]);
+  const [selectedService, setSelectedService] = useState(null);
+  const [serviceDropDownData, setServiceDropDownData] = useState(null);
+  const [serviceForPayment, setServiceForPayment] = useState();
 
   useEffect(() => {
     if (!user) return;
     axiosInstance
       .get("/user/listServices", { headers: { "x-auth-token": user._id } })
       .then((res) => {
-        setServices(res.data.data.services);
-        console.log(services);
+        setAllServices(res.data.data.services);
+        console.log(allServices);
       })
       .catch((err) => {
         toast.error(`Error getting service providers: ${err.message}`);
       });
   }, [user]);
+
+  useEffect(() => {
+    console.log(selectedService);
+    setServiceDropDownData(selectedService?.services);
+  }, [selectedService]);
 
   const handleWalletPayment = useCallback(
     async (amount, email) => {
@@ -44,80 +52,94 @@ const ServicePayment = () => {
     [user]
   );
 
-  // const handleCardPayment = useCallback(
-  //   async (amount, senderEmail, recipientEmail) => {
-  //     const res = await new Promise((resolve, reject) => {
-  //       let handler = PaystackPop.setup({
-  //         key: "pk_test_31f7956563c471afc54134f22435bff182b71bc6", // Replace with your public key
-  //         email: senderEmail,
-  //         amount: amount * 100,
-  //         onClose: function () {
-  //           toast.info("Payment Window closed.");
-  //         },
-  //         callback: function (response) {
-  //           let message = "Payment complete! Reference: " + response.reference;
-  //           axiosInstance
-  //             .post("/payment/verify", { reference: response.reference })
-  //             .then((res) => {
-  //               setUser(res.data.user);
-  //               setAmount(0);
-  //               toast.success(message);
-  //             })
-  //             .then(async () => {
-  //               await handleWalletPayment(amount, recipientEmail).then(
-  //                 (res) => {
-  //                   resolve(res);
-  //                 }
-  //               );
-  //             })
-  //             .catch((err) => {
-  //               console.error(err);
-  //               toast.error("Could not verify payment");
-  //               reject(err);
-  //             });
-  //         },
-  //       });
-  //       handler.openIframe();
-  //     });
-  //     return res;
-  //   },
-  //   [handleWalletPayment]
-  // );
+  const handleServiceSelection = (ownerId) => {
+    setSelectedService(ownerId);
+  };
 
-  // const handleServicePayment = useCallback(
-  //   async (e) => {
-  //     e.preventDefault();
-  //     try {
-  //       let res;
-  //       if (paymentMethod === "wallet") {
-  //         res = await handleWalletPayment(
-  //           amount,
-  //           selectedServiceProviderObject.email
-  //         );
-  //       } else {
-  //         console.log(user.email);
-  //         res = await handleCardPayment(
-  //           amount,
-  //           user.email,
-  //           selectedServiceProviderObject.email
-  //         );
-  //       }
-  //       console.log(res);
-  //       toast.success(`Payment successful: ${res.data.data.message}`);
-  //     } catch (err) {
-  //       console.error(err);
-  //       toast.error("Error making payment");
-  //     }
-  //   },
-  //   [
-  //     selectedServiceProviderObject,
-  //     user,
-  //     amount,
-  //     paymentMethod,
-  //     handleWalletPayment,
-  //     handleCardPayment,
-  //   ]
-  // );
+  const handleCardPayment = useCallback(
+    async (amount, senderEmail, recipientEmail) => {
+      const res = await new Promise((resolve, reject) => {
+        let handler = PaystackPop.setup({
+          key: "pk_test_31f7956563c471afc54134f22435bff182b71bc6", // Replace with your public key
+          email: senderEmail,
+          amount: amount * 100,
+          onClose: function () {
+            toast.info("Payment Window closed.");
+          },
+          callback: function (response) {
+            let message = "Payment complete! Reference: " + response.reference;
+            axiosInstance
+              .post("/payment/verify", { reference: response.reference })
+              .then((res) => {
+                setUser(res.data.user);
+                setAmount(0);
+                toast.success(message);
+              })
+              .then(async () => {
+                await handleWalletPayment(amount, recipientEmail).then(
+                  (res) => {
+                    resolve(res);
+                  }
+                );
+                setSelectedService(null);
+                setServiceDropDownData(null);
+                setServiceForPayment(null);
+                setAmount(0);
+              })
+              .catch((err) => {
+                console.error(err);
+                toast.error("Could not verify payment");
+                reject(err);
+                setSelectedService(null);
+                setServiceDropDownData(null);
+                setServiceForPayment(null);
+                setAmount(0);
+              });
+          },
+        });
+        handler.openIframe();
+      });
+      return res;
+    },
+    [handleWalletPayment]
+  );
+
+  const handleServicePayment = useCallback(
+    async (e) => {
+      e.preventDefault();
+      try {
+        let res;
+        if (paymentMethod === "wallet") {
+          res = await handleWalletPayment(amount, selectedService.ownerEmail);
+        } else {
+          console.log(user.email);
+          res = await handleCardPayment(
+            amount,
+            user.email,
+            selectedService.ownerEmail
+          );
+        }
+        console.log(res);
+        toast.success(`Payment successful: ${res.data.data.message}`);
+      } catch (err) {
+        console.error(err);
+        toast.error("Error making payment");
+      } finally {
+        setSelectedService(null);
+        setServiceDropDownData(null);
+        setServiceForPayment(null);
+        setAmount(0);
+      }
+    },
+    [
+      selectedService,
+      user,
+      amount,
+      paymentMethod,
+      handleWalletPayment,
+      handleCardPayment,
+    ]
+  );
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white font-agrandir">
@@ -131,7 +153,56 @@ const ServicePayment = () => {
           </button>
           <div className="text-3xl" />
         </div>
-        <form onSubmit={null} className="space-y-6">
+        <form onSubmit={handleServicePayment} className="space-y-6">
+          <div className="relative">
+            Click to select a service
+            <div className="grid grid-cols-2 gap-4 mt-3">
+              {allServices.map((service, index) => (
+                <div
+                  className={`p-4 ${
+                    selectedService?.ownerId == service.ownerId
+                      ? "bg-blue-500"
+                      : "bg-black"
+                  } rounded-lg cursor-pointer`}
+                  onClick={() => handleServiceSelection(service)}
+                  key={index}
+                >
+                  {service.ownerName}
+                </div>
+              ))}
+            </div>
+          </div>
+          {serviceDropDownData?.length > 0 && (
+            <div>
+              <select
+                id="service"
+                className="w-full bg-transparent border-b-2 border-white text-white p-2 focus:outline-none focus:border-blue-300"
+                onChange={(e) => {
+                  const selected = serviceDropDownData.find(
+                    (service) => service.serviceName === e.target.value
+                  );
+                  setServiceForPayment(selected);
+                  setAmount(selected.amount);
+                }}
+                value={serviceForPayment ? serviceForPayment.serviceName : ""}
+                required
+              >
+                <option value="" disabled>
+                  Select Payment to make
+                </option>
+                {serviceDropDownData.map((service, index) => (
+                  <option
+                    key={index}
+                    value={service.ownerId}
+                    className="text-black"
+                  >
+                    {service.serviceName}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
           <div className="relative">
             <label htmlFor="amount" className="block text-white text-left mb-2">
               Amount <span></span>
@@ -142,8 +213,7 @@ const ServicePayment = () => {
               placeholder="Enter amount"
               className="w-full bg-transparent border-b-2 border-white text-white p-2 focus:outline-none focus:border-blue-300"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              required
+              readOnly
             />
           </div>
           <div className="relative">

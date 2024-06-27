@@ -80,8 +80,11 @@ const ManageService = () => {
               <div className="text-xl">Service Name</div>
               <div className="text-xl">Price</div>
             </div>
-            {services.map((service) => (
-              <div className="grid grid-cols-[0.5fr,0.5fr] text-start">
+            {services.map((service, index) => (
+              <div
+                key={index}
+                className="grid grid-cols-[0.5fr,0.5fr] text-start"
+              >
                 <div className="text-sm">{service.serviceName}</div>
                 <div className="text-sm"> {formatCurrency(service.amount)}</div>
               </div>
